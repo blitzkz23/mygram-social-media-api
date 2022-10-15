@@ -1,1 +1,1 @@
-# mygram-social-media-api
+# MyGram Social Media API

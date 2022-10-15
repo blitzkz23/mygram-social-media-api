@@ -16,13 +16,31 @@ func NewUserPG(db *gorm.DB) user_repository.UserRepository {
 }
 
 func (u *userPG) GetUserByID(userId uint) (*entity.User, error) {
-	return nil, nil
+	user := entity.User{}
+
+	err := u.db.Debug().Model(user).Where("id = ?", userId).Take(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
-func (u *userPG) Login(user *entity.User) (*entity.User, error) {
-	return nil, nil
+func (u *userPG) Login(userPayload *entity.User) (*entity.User, error) {
+	err := u.db.Debug().Where("email = ?", userPayload.Email).Take(&userPayload).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return userPayload, nil
 }
 
-func (u *userPG) Register(user *entity.User) error {
+func (u *userPG) Register(userPayload *entity.User) error {
+	err := u.db.Debug().Create(userPayload).Error
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
