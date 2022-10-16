@@ -36,8 +36,8 @@ func StartApp() {
 	{
 		userRoute.POST("/login", userRestHandler.Login)
 		userRoute.POST("/register", userRestHandler.Register)
-		userRoute.PUT("/update/:userID", authService.Authentication(), userRestHandler.UpdateUserData)
-		userRoute.DELETE("/delete/:userID", authService.Authentication(), userRestHandler.DeleteUser)
+		userRoute.PUT("/update/", authService.Authentication(), userRestHandler.UpdateUserData)
+		userRoute.DELETE("/delete/", authService.Authentication(), userRestHandler.DeleteUser)
 	}
 
 	photoRoute := route.Group("/photos")

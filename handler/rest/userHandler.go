@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 	"mygram-social-media-api/dto"
+	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/helpers"
 	"mygram-social-media-api/service"
 	"net/http"
@@ -86,6 +87,7 @@ func (u *userRestHandler) Register(c *gin.Context) {
 func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 	var updateUserDataRequest dto.UpdateUserDataRequest
 	var err error
+	var userData entity.User
 
 	contentType := helpers.GetContentType(c)
 	if contentType == helpers.AppJSON {
@@ -102,17 +104,18 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 		return
 	}
 
-	userID, err := helpers.GetParamId(c, "userID")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "bad_request",
-			"message": err.Error(),
+	if value, ok := c.MustGet("userData").(entity.User); !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"err_message": "unauthorized",
 		})
 		return
+	} else {
+		userData = value
 	}
+	fmt.Println("APAKAH ADA ID", userData.ID)
 
 	// ! TODO: Update error but data updated
-	response, err := u.userService.UpdateUserData(userID, &updateUserDataRequest)
+	response, err := u.userService.UpdateUserData(userData.ID, &updateUserDataRequest)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error":   "unprocessable_entity",
@@ -125,16 +128,18 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 }
 
 func (u *userRestHandler) DeleteUser(c *gin.Context) {
-	userID, err := helpers.GetParamId(c, "userID")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "bad_request",
-			"message": err.Error(),
+	var userData entity.User
+	if value, ok := c.MustGet("userData").(entity.User); !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"err_message": "unauthorized",
 		})
 		return
+	} else {
+		userData = value
 	}
+	fmt.Println("APAKAH ADA ID", userData.ID)
 
-	response, err := u.userService.DeleteUser(userID)
+	response, err := u.userService.DeleteUser(userData.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "internal_server_error",
