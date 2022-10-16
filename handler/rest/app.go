@@ -22,6 +22,8 @@ func StartApp() {
 	userService := service.NewUserService(userRepo)
 	userRestHandler := NewUserRestHandler(userService)
 
+	authService := service.NewAuthService(userRepo)
+
 	// ! Routing
 	route := gin.Default()
 
@@ -29,6 +31,7 @@ func StartApp() {
 	{
 		userRoute.POST("/login", userRestHandler.Login)
 		userRoute.POST("/register", userRestHandler.Register)
+		userRoute.PUT("/update/:userID", authService.Authentication(), userRestHandler.UpdateUserData)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

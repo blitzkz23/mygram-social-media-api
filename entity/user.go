@@ -2,6 +2,9 @@ package entity
 
 import (
 	"errors"
+	"fmt"
+	"mygram-social-media-api/pkg/errs"
+	"strings"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -32,13 +35,13 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (u *User) HashPass() error {
+func (u *User) HashPass() errs.MessageErr {
 	salt := 8
 	password := []byte(u.Password)
 	hash, err := bcrypt.GenerateFromPassword(password, salt)
 
 	if err != nil {
-		return errors.New("interal server error")
+		return errs.NewInternalServerErrorr("error hashing password")
 	}
 
 	u.Password = string(hash)
@@ -46,14 +49,14 @@ func (u *User) HashPass() error {
 	return nil
 }
 
-// * Verify encrypted password with bcrypt
+// * Verify encrypted password with bcrypt.
 func (u *User) VerifyPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 
 	return err == nil
 }
 
-// * Generate token with jwt
+// * Generate token with jwt.
 func (u *User) GenerateToken() string {
 	claims := jwt.MapClaims{
 		"id":    u.ID,
@@ -65,4 +68,52 @@ func (u *User) GenerateToken() string {
 	signedToken, _ := parseToken.SignedString([]byte(secret_key))
 
 	return signedToken
+}
+
+// * Verify token with jwt for auth purposes.
+func (u *User) VerifyToken(tokenStr string) error {
+	fmt.Println("tokenStr => ", tokenStr)
+	if bearer := strings.HasPrefix(tokenStr, "Bearer "); !bearer {
+		return errors.New("login to proceed")
+	}
+
+	stringToken := strings.Split(tokenStr, " ")[1]
+
+	token, _ := jwt.Parse(stringToken, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("login to proceed")
+		}
+
+		return []byte(secret_key), nil
+	})
+
+	var mapClaims jwt.MapClaims
+
+	if v, ok := token.Claims.(jwt.MapClaims); !ok || !token.Valid {
+		return errors.New("login to proceed")
+	} else {
+		mapClaims = v
+	}
+
+	if exp, ok := mapClaims["exp"].(float64); !ok || !token.Valid {
+		return errors.New("login to proceed")
+	} else {
+		if int64(exp)-time.Now().Unix() < 0 {
+			return errors.New("login to proceed")
+		}
+	}
+
+	if v, ok := mapClaims["id"].(float64); !ok || !token.Valid {
+		return errors.New("login to proceed")
+	} else {
+		u.ID = uint(v)
+	}
+
+	if v, ok := mapClaims["email"].(string); !ok || !token.Valid {
+		return errors.New("login to proceed")
+	} else {
+		u.Email = v
+	}
+
+	return nil
 }

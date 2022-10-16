@@ -3,7 +3,7 @@ package rest
 import (
 	"fmt"
 	"mygram-social-media-api/dto"
-	"mygram-social-media-api/helpers"
+	"mygram-social-media-api/pkg/helpers"
 	"mygram-social-media-api/service"
 	"net/http"
 
@@ -85,4 +85,45 @@ func (u *userRestHandler) Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, successMessage)
+}
+
+func (u *userRestHandler) UpdateUserData(c *gin.Context) {
+	var updateUserDataRequest dto.UpdateUserDataRequest
+	var err error
+
+	contentType := helpers.GetContentType(c)
+	if contentType == appJSON {
+		err = c.ShouldBindJSON(&updateUserDataRequest)
+	} else {
+		err = c.ShouldBind(&updateUserDataRequest)
+	}
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "bad_request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	userID, err := helpers.GetParamId(c, "userID")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "bad_request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// ! TODO: Update error but data updated
+	response, err := u.userService.UpdateUserData(userID, &updateUserDataRequest)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"error":   "unprocessable_entity",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
 }

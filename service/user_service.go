@@ -1,17 +1,19 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	"mygram-social-media-api/dto"
 	"mygram-social-media-api/entity"
-	"mygram-social-media-api/helpers"
+	"mygram-social-media-api/pkg/errs"
+	"mygram-social-media-api/pkg/helpers"
+
 	"mygram-social-media-api/repository/user_repository"
 )
 
 type UserService interface {
-	Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, error)
-	Register(userPayload *dto.RegisterRequest) (*dto.RegisterResponse, error)
+	Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, errs.MessageErr)
+	Register(userPayload *dto.RegisterRequest) (*dto.RegisterResponse, errs.MessageErr)
+	UpdateUserData(userId uint, userPayload *dto.UpdateUserDataRequest) (*dto.UpdateUserDataResponse, errs.MessageErr)
 }
 
 type userService struct {
@@ -22,7 +24,7 @@ func NewUserService(userRepo user_repository.UserRepository) UserService {
 	return &userService{userRepo: userRepo}
 }
 
-func (u *userService) Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, error) {
+func (u *userService) Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, errs.MessageErr) {
 	err := helpers.ValidateStruct(userPayload)
 	if err != nil {
 		return nil, err
@@ -34,14 +36,12 @@ func (u *userService) Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, 
 
 	user, err := u.userRepo.Login(payload)
 	if err != nil {
-		fmt.Println("Error get use by email")
 		return nil, err
 	}
 
 	validPassword := user.VerifyPassword(userPayload.Password)
 	if !validPassword {
-		fmt.Println("Error compare password")
-		return nil, errors.New("invalid password")
+		return nil, errs.NewNotAuthenticated("Invalid email or password")
 	}
 
 	token := user.GenerateToken()
@@ -53,7 +53,7 @@ func (u *userService) Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, 
 	return response, nil
 }
 
-func (u *userService) Register(userPayload *dto.RegisterRequest) (*dto.RegisterResponse, error) {
+func (u *userService) Register(userPayload *dto.RegisterRequest) (*dto.RegisterResponse, errs.MessageErr) {
 	err := helpers.ValidateStruct(userPayload)
 	if err != nil {
 		return nil, err
@@ -76,9 +76,35 @@ func (u *userService) Register(userPayload *dto.RegisterRequest) (*dto.RegisterR
 		return nil, err
 	}
 
-	res := &dto.RegisterResponse{
+	response := &dto.RegisterResponse{
 		Message: "User data has been successfully registered",
 	}
 
-	return res, nil
+	return response, nil
+}
+
+func (u *userService) UpdateUserData(userId uint, userPayload *dto.UpdateUserDataRequest) (*dto.UpdateUserDataResponse, errs.MessageErr) {
+	err := helpers.ValidateStruct(userPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	user := &entity.User{
+		Email:    userPayload.Email,
+		Username: userPayload.Username,
+	}
+
+	user, err = u.userRepo.UpdateUserData(userId, user)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Data user", user.Email)
+
+	response := &dto.UpdateUserDataResponse{
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+	}
+
+	return response, nil
 }

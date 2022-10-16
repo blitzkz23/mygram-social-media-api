@@ -19,3 +19,16 @@ type RegisterRequest struct {
 type RegisterResponse struct {
 	Message string `json:"message"`
 }
+
+type UpdateUserDataRequest struct {
+	Email    string `json:"email" form:"email" valid:"required~Email is required,email~Email is not valid"`
+	Username string `json:"username" form:"username" valid:"required~Username is required"`
+}
+
+type UpdateUserDataResponse struct {
+	ID        uint   `json:"id"`
+	Email     string `json:"email"`
+	Username  string `json:"username"`
+	Age       uint8  `json:"age"`
+	UpdatedAt string `json:"updated_at"`
+}
