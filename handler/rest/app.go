@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 	"mygram-social-media-api/database"
+	"mygram-social-media-api/repository/photo_repository/photo_pg"
 	"mygram-social-media-api/repository/user_repository/user_pg"
 	"mygram-social-media-api/service"
 
@@ -22,6 +23,10 @@ func StartApp() {
 	userService := service.NewUserService(userRepo)
 	userRestHandler := NewUserRestHandler(userService)
 
+	photoRepo := photo_pg.NewPhotoPG(db)
+	photoService := service.NewPhotoService(photoRepo)
+	photoRestHandler := NewPhotoRestHandler(photoService)
+
 	authService := service.NewAuthService(userRepo)
 
 	// ! Routing
@@ -33,6 +38,12 @@ func StartApp() {
 		userRoute.POST("/register", userRestHandler.Register)
 		userRoute.PUT("/update/:userID", authService.Authentication(), userRestHandler.UpdateUserData)
 		userRoute.DELETE("/delete/:userID", authService.Authentication(), userRestHandler.DeleteUser)
+	}
+
+	photoRoute := route.Group("/photos")
+	{
+		photoRoute.Use(authService.Authentication())
+		photoRoute.POST("/post", photoRestHandler.PostPhoto)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

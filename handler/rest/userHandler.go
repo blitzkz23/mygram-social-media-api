@@ -10,10 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	appJSON = "application/json"
-)
-
 type userRestHandler struct {
 	userService service.UserService
 }
@@ -23,14 +19,14 @@ func NewUserRestHandler(userService service.UserService) *userRestHandler {
 }
 
 func (u *userRestHandler) Login(c *gin.Context) {
-	var user dto.LoginRequest
+	var userRequest dto.LoginRequest
 	var err error
 
 	contentType := helpers.GetContentType(c)
-	if contentType == appJSON {
-		err = c.ShouldBindJSON(&user)
+	if contentType == helpers.AppJSON {
+		err = c.ShouldBindJSON(&userRequest)
 	} else {
-		err = c.ShouldBind(&user)
+		err = c.ShouldBind(&userRequest)
 	}
 
 	if err != nil {
@@ -41,7 +37,7 @@ func (u *userRestHandler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := u.userService.Login(&user)
+	token, err := u.userService.Login(&userRequest)
 
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -54,15 +50,15 @@ func (u *userRestHandler) Login(c *gin.Context) {
 }
 
 func (u *userRestHandler) Register(c *gin.Context) {
-	var user dto.RegisterRequest
+	var userRequest dto.RegisterRequest
 	var err error
 
 	contentType := helpers.GetContentType(c)
-	if contentType == appJSON {
+	if contentType == helpers.AppJSON {
 		// ! TODO: JSON bind not working
-		err = c.ShouldBindJSON(&user)
+		err = c.ShouldBindJSON(&userRequest)
 	} else {
-		err = c.ShouldBind(&user)
+		err = c.ShouldBind(&userRequest)
 	}
 
 	if err != nil {
@@ -73,8 +69,8 @@ func (u *userRestHandler) Register(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("User =>", &user)
-	successMessage, err := u.userService.Register(&user)
+	fmt.Println("User =>", &userRequest)
+	successMessage, err := u.userService.Register(&userRequest)
 
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -92,7 +88,7 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 	var err error
 
 	contentType := helpers.GetContentType(c)
-	if contentType == appJSON {
+	if contentType == helpers.AppJSON {
 		err = c.ShouldBindJSON(&updateUserDataRequest)
 	} else {
 		err = c.ShouldBind(&updateUserDataRequest)

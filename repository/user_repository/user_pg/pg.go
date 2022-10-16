@@ -16,20 +16,6 @@ func NewUserPG(db *gorm.DB) user_repository.UserRepository {
 	return &userPG{db: db}
 }
 
-func (u *userPG) GetUserByID(userId uint) (*entity.User, errs.MessageErr) {
-	user := entity.User{}
-
-	err := u.db.Debug().Model(user).Where("id = ?", userId).Take(&user).Error
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, errs.NewNotFoundError("User not found")
-		}
-		return nil, errs.NewInternalServerErrorr("Something went wrong")
-	}
-
-	return &user, nil
-}
-
 func (u *userPG) GetUserByIDAndEmail(userPayload *entity.User) (*entity.User, errs.MessageErr) {
 	user := entity.User{}
 
@@ -71,7 +57,7 @@ func (u *userPG) Register(userPayload *entity.User) errs.MessageErr {
 func (u *userPG) UpdateUserData(userId uint, userPayload *entity.User) (*entity.User, errs.MessageErr) {
 	user := entity.User{}
 
-	err := u.db.Debug().Model(user).Where("id = ?", userId).Updates(userPayload).Error
+	err := u.db.Debug().Model(user).Where("id = ?", userId).Updates(userPayload).Take(&user).Error
 	if err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}

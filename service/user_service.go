@@ -102,9 +102,11 @@ func (u *userService) UpdateUserData(userId uint, userPayload *dto.UpdateUserDat
 	fmt.Println("Data user", user.Email)
 
 	response := &dto.UpdateUserDataResponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Email:    user.Email,
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		Age:       user.Age,
+		UpdatedAt: user.UpdatedAt,
 	}
 
 	return response, nil

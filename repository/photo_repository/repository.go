@@ -8,6 +8,6 @@ import (
 type PhotoRepository interface {
 	PostPhoto(photo *entity.Photo) (*entity.Photo, errs.MessageErr)
 	GetAllPhotos() ([]entity.Photo, errs.MessageErr)
-	EditPhotoData(photo *entity.Photo) (*entity.Photo, errs.MessageErr)
-	DeletePhoto(photoId uint) errs.MessageErr
+	EditPhotoData(photoID uint, photo *entity.Photo) (*entity.Photo, errs.MessageErr)
+	DeletePhoto(photoID uint) errs.MessageErr
 }
