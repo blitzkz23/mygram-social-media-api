@@ -10,9 +10,10 @@ type LoginResponse struct {
 }
 
 type RegisterRequest struct {
-	Username string `form:"username" json:"username" valid:"required~Username is required"`
-	Email    string `form:"email" json:"email" valid:"required~Email is required,email~Email is not valid"`
-	Password string `form:"password" json:"password" valid:"required~Password is required"`
+	Username string `json:"username" form:"username" valid:"required~Username is required"`
+	Email    string `json:"email" form:"email" valid:"required~Email is required,email~Email is not valid"`
+	Password string `json:"password" form:"password" valid:"required~Password is required"`
+	Age      uint8  `json:"age" form:"age" valid:"required~Age is required,range(8|100)~Age must be between 8 and 100"`
 }
 
 type RegisterResponse struct {
