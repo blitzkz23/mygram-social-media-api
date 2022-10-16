@@ -32,6 +32,7 @@ func StartApp() {
 		userRoute.POST("/login", userRestHandler.Login)
 		userRoute.POST("/register", userRestHandler.Register)
 		userRoute.PUT("/update/:userID", authService.Authentication(), userRestHandler.UpdateUserData)
+		userRoute.DELETE("/delete/:userID", authService.Authentication(), userRestHandler.DeleteUser)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

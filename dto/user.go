@@ -32,3 +32,7 @@ type UpdateUserDataResponse struct {
 	Age       uint8  `json:"age"`
 	UpdatedAt string `json:"updated_at"`
 }
+
+type DeleteUserResponse struct {
+	Message string `json:"message"`
+}

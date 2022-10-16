@@ -11,4 +11,5 @@ type UserRepository interface {
 	Register(user *entity.User) errs.MessageErr
 	GetUserByIDAndEmail(user *entity.User) (*entity.User, errs.MessageErr)
 	UpdateUserData(userId uint, user *entity.User) (*entity.User, errs.MessageErr)
+	DeleteUser(userId uint) errs.MessageErr
 }

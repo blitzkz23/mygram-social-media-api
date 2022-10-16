@@ -127,3 +127,25 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func (u *userRestHandler) DeleteUser(c *gin.Context) {
+	userID, err := helpers.GetParamId(c, "userID")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "bad_request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	response, err := u.userService.DeleteUser(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "internal_server_error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}

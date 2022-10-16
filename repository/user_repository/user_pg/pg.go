@@ -78,3 +78,14 @@ func (u *userPG) UpdateUserData(userId uint, userPayload *entity.User) (*entity.
 
 	return &user, nil
 }
+
+func (u *userPG) DeleteUser(userId uint) errs.MessageErr {
+	user := entity.User{}
+
+	err := u.db.Debug().Where("id = ?", userId).Delete(&user).Error
+	if err != nil {
+		return errs.NewInternalServerErrorr("Something went wrong")
+	}
+
+	return nil
+}
