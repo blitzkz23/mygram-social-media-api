@@ -42,7 +42,7 @@ func (u *userService) Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, 
 
 	validPassword := user.VerifyPassword(userPayload.Password)
 	if !validPassword {
-		return nil, errs.NewNotAuthenticated("Invalid email or password")
+		return nil, errs.NewUnAuthorized("Invalid email or password")
 	}
 
 	token := user.GenerateToken()

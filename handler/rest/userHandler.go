@@ -38,12 +38,12 @@ func (u *userRestHandler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := u.userService.Login(&userRequest)
+	token, err2 := u.userService.Login(&userRequest)
 
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"error":   "unprocessable_entity",
-			"message": err.Error(),
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
 		})
 		return
 	}
@@ -71,12 +71,12 @@ func (u *userRestHandler) Register(c *gin.Context) {
 	}
 
 	fmt.Println("User =>", &userRequest)
-	successMessage, err := u.userService.Register(&userRequest)
+	successMessage, err2 := u.userService.Register(&userRequest)
 
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"error":   "unprocessable_entity",
-			"message": err.Error(),
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Message(),
+			"message": err2.Error(),
 		})
 		return
 	}
@@ -114,11 +114,11 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 	}
 
 	// ! TODO: Update error but data updated
-	response, err := u.userService.UpdateUserData(userData.ID, &updateUserDataRequest)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"error":   "unprocessable_entity",
-			"message": err.Error(),
+	response, err2 := u.userService.UpdateUserData(userData.ID, &updateUserDataRequest)
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
 		})
 		return
 	}
@@ -137,11 +137,11 @@ func (u *userRestHandler) DeleteUser(c *gin.Context) {
 		userData = value
 	}
 
-	response, err := u.userService.DeleteUser(userData.ID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   "internal_server_error",
-			"message": err.Error(),
+	response, err2 := u.userService.DeleteUser(userData.ID)
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
 		})
 		return
 	}

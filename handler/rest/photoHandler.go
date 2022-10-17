@@ -74,7 +74,8 @@ func (p *photoRestHandler) GetAllPhotos(c *gin.Context) {
 	photos, err := p.photoService.GetAllPhotos()
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{
-			"err_message": "forbidden",
+			"error":   "forbidden",
+			"message": err.Error(),
 		})
 		return
 	}
