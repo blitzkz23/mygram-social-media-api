@@ -13,7 +13,7 @@ type PhotoService interface {
 	PostPhoto(userID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoResponse, errs.MessageErr)
 	GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr)
 	EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoUpdateResponse, errs.MessageErr)
-	DeletePhoto(photoID uint) *dto.DeletePhotoResponse
+	DeletePhoto(photoID uint) (*dto.DeletePhotoResponse, errs.MessageErr)
 }
 
 type photoService struct {
@@ -99,6 +99,21 @@ func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoReques
 	return response, nil
 }
 
-func (p *photoService) DeletePhoto(photoID uint) *dto.DeletePhotoResponse {
-	return nil
+func (p *photoService) DeletePhoto(photoID uint) (*dto.DeletePhotoResponse, errs.MessageErr) {
+	_, err := p.photoRepository.GetPhotoByID(photoID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = p.photoRepository.DeletePhoto(photoID)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &dto.DeletePhotoResponse{
+		Message: "Photo has been deleted",
+	}
+
+	fmt.Println("Melihat response di service: ", response)
+	return response, nil
 }

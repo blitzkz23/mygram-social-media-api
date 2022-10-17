@@ -36,16 +36,17 @@ func StartApp() {
 	{
 		userRoute.POST("/login", userRestHandler.Login)
 		userRoute.POST("/register", userRestHandler.Register)
-		userRoute.PUT("/update/", authService.Authentication(), userRestHandler.UpdateUserData)
-		userRoute.DELETE("/delete/", authService.Authentication(), userRestHandler.DeleteUser)
+		userRoute.PUT("/", authService.Authentication(), userRestHandler.UpdateUserData)
+		userRoute.DELETE("/", authService.Authentication(), userRestHandler.DeleteUser)
 	}
 
 	photoRoute := route.Group("/photos")
 	{
 		photoRoute.Use(authService.Authentication())
-		photoRoute.POST("/post", photoRestHandler.PostPhoto)
+		photoRoute.POST("/", photoRestHandler.PostPhoto)
 		photoRoute.GET("/", photoRestHandler.GetAllPhotos)
-		photoRoute.PUT("/update/:photoID", authService.PhotoAuthorization(), photoRestHandler.UpdatePhoto)
+		photoRoute.PUT("/:photoID", authService.PhotoAuthorization(), photoRestHandler.UpdatePhoto)
+		photoRoute.DELETE("/:photoID", authService.PhotoAuthorization(), photoRestHandler.DeletePhoto)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

@@ -65,7 +65,7 @@ func (p *photoPG) GetPhotoByID(photoID uint) (*entity.Photo, errs.MessageErr) {
 func (p *photoPG) EditPhotoData(photoID uint, photoPayload *entity.Photo) (*entity.Photo, errs.MessageErr) {
 	photo := entity.Photo{}
 
-	err := p.db.Raw("Update photos SET title = ?, caption = ?, photo_url = ?, updated_at = ? WHERE id = ? RETURNING id, title, caption, photo_url, updated_at", photoPayload.Title, photoPayload.Caption, photoPayload.PhotoURL, time.Now(), photoID).Scan(&photo).Error
+	err := p.db.Raw("Update photos SET title = ?, caption = ?, photo_url = ?, updated_at = ? WHERE id = ? RETURNING id, title, caption, user_id, photo_url, updated_at", photoPayload.Title, photoPayload.Caption, photoPayload.PhotoURL, time.Now(), photoID).Scan(&photo).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("Photo not found")

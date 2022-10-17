@@ -110,8 +110,6 @@ func (p *photoRestHandler) UpdatePhoto(c *gin.Context) {
 		return
 	}
 
-	_ = photoIdParam
-
 	photo, err2 := p.photoService.EditPhotoData(photoIdParam, &photoRequest)
 	if err2 != nil {
 		c.JSON(err2.Status(), gin.H{
@@ -122,4 +120,27 @@ func (p *photoRestHandler) UpdatePhoto(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusAccepted, photo)
+}
+
+func (p *photoRestHandler) DeletePhoto(c *gin.Context) {
+	photoIdParam, err := helpers.GetParamId(c, "photoID")
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"err_message": "invalid params",
+		})
+		return
+	}
+
+	_ = photoIdParam
+
+	res, err2 := p.photoService.DeletePhoto(photoIdParam)
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
 }
