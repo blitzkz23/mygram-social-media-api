@@ -32,7 +32,7 @@ func StartApp() {
 	// ! Routing
 	route := gin.Default()
 
-	userRoute := route.Group("/user")
+	userRoute := route.Group("/users")
 	{
 		userRoute.POST("/login", userRestHandler.Login)
 		userRoute.POST("/register", userRestHandler.Register)

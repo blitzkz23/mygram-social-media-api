@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"mygram-social-media-api/dto"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/jinzhu/gorm"
 )
@@ -12,6 +14,22 @@ type Photo struct {
 	PhotoURL string `gorm:"not null;type:varchar(191)" form:"photo_url" json:"photo_url" valid:"required~Photo URL is required"`
 	UserID   uint   `json:"user_id"`
 	User     *User
+}
+
+func (p *Photo) ToGetPhotoResponseDTO() *dto.GetPhotoResponse {
+	return &dto.GetPhotoResponse{
+		ID:        p.ID,
+		Title:     p.Title,
+		Caption:   p.Caption,
+		PhotoURL:  p.PhotoURL,
+		UserID:    p.UserID,
+		CreatedAt: p.CreatedAt,
+		UpdatedAt: p.UpdatedAt,
+		User: dto.UserResponse{
+			Username: p.User.Username,
+			Email:    p.User.Email,
+		},
+	}
 }
 
 func (p *Photo) BeforeCreate(tx *gorm.DB) (err error) {

@@ -55,12 +55,17 @@ func (p *photoService) PostPhoto(userID uint, photoPayload *dto.PhotoRequest) (*
 }
 
 func (p *photoService) GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr) {
+	dto := make([]*dto.GetPhotoResponse, 0)
 	photos, err := p.photoRepository.GetAllPhotos()
 	if err != nil {
 		return nil, err
 	}
 
-	return photos, nil
+	for _, photo := range photos {
+		dto = append(dto, photo.ToGetPhotoResponseDTO())
+	}
+
+	return dto, nil
 }
 
 func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoUpdateResponse, errs.MessageErr) {

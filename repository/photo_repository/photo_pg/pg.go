@@ -2,10 +2,10 @@ package photo_pg
 
 import (
 	"fmt"
-	"mygram-social-media-api/dto"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/errs"
 	"mygram-social-media-api/repository/photo_repository"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -37,23 +37,13 @@ func (p *photoPG) PostPhoto(photoPayload *entity.Photo) (*entity.Photo, errs.Mes
 	return &photo, nil
 }
 
-func (p *photoPG) GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr) {
-	photos := []*dto.GetPhotoResponse{}
-	photoWithUser := photo_repository.PhotoWithUser{}
+func (p *photoPG) GetAllPhotos() ([]*entity.Photo, errs.MessageErr) {
+	photos := []*entity.Photo{}
 
-	rows, err := p.db.Debug().Model(photoWithUser).Table("photos").Select("photos.id, photos.title, photos.caption, photos.photo_url, photos.user_id, photos.created_at, photos.updated_at, users.email, users.username").Joins("JOIN users ON photos.user_id = users.id").Rows()
-	if err != nil {
+	if err := p.db.Debug().Preload("User").Find(&photos).Error; err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
-	for rows.Next() {
-		err = p.db.ScanRows(rows, &photoWithUser)
-		if err != nil {
-			return nil, errs.NewInternalServerErrorr("Something went wrong")
-		}
-
-		dto := photoWithUser.ToGetPhotoResponseDTO()
-		photos = append(photos, &dto)
-	}
+	fmt.Println("Melihat photos", photos)
 
 	return photos, nil
 }
@@ -61,9 +51,7 @@ func (p *photoPG) GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr) {
 func (p *photoPG) GetPhotoByID(photoID uint) (*entity.Photo, errs.MessageErr) {
 	photo := entity.Photo{}
 
-	fmt.Println("APAKAH ADA ID DISINI", photoID)
 	err := p.db.Debug().Model(photo).Where("id = ?", photoID).First(&photo).Error
-	fmt.Println("APAKAH ADA ID DISINI 2", photoID, &photo)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("Photo not found")
@@ -76,9 +64,8 @@ func (p *photoPG) GetPhotoByID(photoID uint) (*entity.Photo, errs.MessageErr) {
 
 func (p *photoPG) EditPhotoData(photoID uint, photoPayload *entity.Photo) (*entity.Photo, errs.MessageErr) {
 	photo := entity.Photo{}
-	fmt.Println("APAKAH ADA ID DISINI 3", photoID)
 
-	err := p.db.Debug().Model(photo).Where("id = ?", photoID).Updates(&photoPayload).Take(&photo).Error
+	err := p.db.Raw("Update photos SET title = ?, caption = ?, photo_url = ?, updated_at = ? WHERE id = ? RETURNING id, title, caption, photo_url, updated_at", photoPayload.Title, photoPayload.Caption, photoPayload.PhotoURL, time.Now(), photoID).Scan(&photo).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("Photo not found")
