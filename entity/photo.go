@@ -2,9 +2,6 @@ package entity
 
 import (
 	"mygram-social-media-api/dto"
-
-	"github.com/asaskevich/govalidator"
-	"github.com/jinzhu/gorm"
 )
 
 type Photo struct {
@@ -30,24 +27,4 @@ func (p *Photo) ToGetPhotoResponseDTO() *dto.GetPhotoResponse {
 			Email:    p.User.Email,
 		},
 	}
-}
-
-func (p *Photo) BeforeCreate(tx *gorm.DB) (err error) {
-	_, errCreate := govalidator.ValidateStruct(p)
-	if errCreate != nil {
-		err = errCreate
-		return
-	}
-	err = nil
-	return
-}
-
-func (p *Photo) BeforeUpdate(tx *gorm.DB) (err error) {
-	_, errCreate := govalidator.ValidateStruct(p)
-	if errCreate != nil {
-		err = errCreate
-		return
-	}
-	err = nil
-	return
 }

@@ -55,10 +55,10 @@ func (u *userService) Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, 
 }
 
 func (u *userService) Register(userPayload *dto.RegisterRequest) (*dto.RegisterResponse, errs.MessageErr) {
-	// err := helpers.ValidateStruct(userPayload)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	err := helpers.ValidateStruct(userPayload)
+	if err != nil {
+		return nil, err
+	}
 
 	user := &entity.User{
 		Username: userPayload.Username,
@@ -67,7 +67,7 @@ func (u *userService) Register(userPayload *dto.RegisterRequest) (*dto.RegisterR
 		Age:      userPayload.Age,
 	}
 
-	err := user.HashPass()
+	err = user.HashPass()
 	if err != nil {
 		return nil, err
 	}

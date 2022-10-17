@@ -7,9 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/asaskevich/govalidator"
 	"github.com/golang-jwt/jwt"
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -24,18 +22,6 @@ type User struct {
 }
 
 // ! TODO: Validator Age not trigerred, also hash pashing not working in hooks
-func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	fmt.Println("BEFORE CReate", u)
-	_, errCreate := govalidator.ValidateStruct(u)
-	if errCreate != nil {
-		err = errCreate
-		return
-	}
-
-	err = nil
-	return
-}
-
 func (u *User) HashPass() errs.MessageErr {
 	salt := 8
 	password := []byte(u.Password)
