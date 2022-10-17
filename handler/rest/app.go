@@ -44,6 +44,7 @@ func StartApp() {
 	{
 		photoRoute.Use(authService.Authentication())
 		photoRoute.POST("/post", photoRestHandler.PostPhoto)
+		photoRoute.GET("/", photoRestHandler.GetAllPhotos)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

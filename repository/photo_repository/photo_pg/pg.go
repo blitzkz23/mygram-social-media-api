@@ -1,6 +1,7 @@
 package photo_pg
 
 import (
+	"mygram-social-media-api/dto"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/errs"
 	"mygram-social-media-api/repository/photo_repository"
@@ -35,13 +36,22 @@ func (p *photoPG) PostPhoto(photoPayload *entity.Photo) (*entity.Photo, errs.Mes
 	return &photo, nil
 }
 
-func (p *photoPG) GetAllPhotos() ([]entity.Photo, errs.MessageErr) {
-	photo := entity.Photo{}
-	photos := []entity.Photo{}
+func (p *photoPG) GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr) {
+	photos := []*dto.GetPhotoResponse{}
+	photoWithUser := photo_repository.PhotoWithUser{}
 
-	err := p.db.Debug().Model(photo).Find(&photos).Error
+	rows, err := p.db.Debug().Model(photoWithUser).Table("photos").Select("photos.id, photos.title, photos.caption, photos.photo_url, photos.user_id, photos.created_at, photos.updated_at, users.email, users.username").Joins("JOIN users ON photos.user_id = users.id").Rows()
 	if err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+	for rows.Next() {
+		err = p.db.ScanRows(rows, &photoWithUser)
+		if err != nil {
+			return nil, errs.NewInternalServerErrorr("Something went wrong")
+		}
+
+		dto := photoWithUser.ToGetPhotoResponseDTO()
+		photos = append(photos, &dto)
 	}
 
 	return photos, nil

@@ -112,7 +112,6 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 	} else {
 		userData = value
 	}
-	fmt.Println("APAKAH ADA ID", userData.ID)
 
 	// ! TODO: Update error but data updated
 	response, err := u.userService.UpdateUserData(userData.ID, &updateUserDataRequest)
@@ -137,7 +136,6 @@ func (u *userRestHandler) DeleteUser(c *gin.Context) {
 	} else {
 		userData = value
 	}
-	fmt.Println("APAKAH ADA ID", userData.ID)
 
 	response, err := u.userService.DeleteUser(userData.ID)
 	if err != nil {

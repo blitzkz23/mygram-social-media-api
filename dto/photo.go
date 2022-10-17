@@ -28,8 +28,8 @@ type GetPhotoResponse struct {
 	Caption   string       `json:"caption"`
 	PhotoURL  string       `json:"photo_url"`
 	UserID    uint         `json:"user_id"`
-	CreatedAt time.Time    `json:"created_at"`
-	UpdatedAt time.Time    `json:"updated_at"`
+	CreatedAt *time.Time   `json:"created_at"`
+	UpdatedAt *time.Time   `json:"updated_at"`
 	User      UserResponse `json:"User"`
 }
 
