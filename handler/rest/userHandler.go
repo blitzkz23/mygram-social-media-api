@@ -3,15 +3,12 @@ package rest
 import (
 	"fmt"
 	"mygram-social-media-api/dto"
+	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/helpers"
 	"mygram-social-media-api/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-)
-
-const (
-	appJSON = "application/json"
 )
 
 type userRestHandler struct {
@@ -23,14 +20,14 @@ func NewUserRestHandler(userService service.UserService) *userRestHandler {
 }
 
 func (u *userRestHandler) Login(c *gin.Context) {
-	var user dto.LoginRequest
+	var userRequest dto.LoginRequest
 	var err error
 
 	contentType := helpers.GetContentType(c)
-	if contentType == appJSON {
-		err = c.ShouldBindJSON(&user)
+	if contentType == helpers.AppJSON {
+		err = c.ShouldBindJSON(&userRequest)
 	} else {
-		err = c.ShouldBind(&user)
+		err = c.ShouldBind(&userRequest)
 	}
 
 	if err != nil {
@@ -41,12 +38,12 @@ func (u *userRestHandler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := u.userService.Login(&user)
+	token, err2 := u.userService.Login(&userRequest)
 
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"error":   "unprocessable_entity",
-			"message": err.Error(),
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
 		})
 		return
 	}
@@ -54,15 +51,15 @@ func (u *userRestHandler) Login(c *gin.Context) {
 }
 
 func (u *userRestHandler) Register(c *gin.Context) {
-	var user dto.RegisterRequest
+	var userRequest dto.RegisterRequest
 	var err error
 
 	contentType := helpers.GetContentType(c)
-	if contentType == appJSON {
+	if contentType == helpers.AppJSON {
 		// ! TODO: JSON bind not working
-		err = c.ShouldBindJSON(&user)
+		err = c.ShouldBindJSON(&userRequest)
 	} else {
-		err = c.ShouldBind(&user)
+		err = c.ShouldBind(&userRequest)
 	}
 
 	if err != nil {
@@ -73,13 +70,13 @@ func (u *userRestHandler) Register(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("User =>", &user)
-	successMessage, err := u.userService.Register(&user)
+	fmt.Println("User =>", &userRequest)
+	successMessage, err2 := u.userService.Register(&userRequest)
 
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"error":   "unprocessable_entity",
-			"message": err.Error(),
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Message(),
+			"message": err2.Error(),
 		})
 		return
 	}
@@ -90,9 +87,10 @@ func (u *userRestHandler) Register(c *gin.Context) {
 func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 	var updateUserDataRequest dto.UpdateUserDataRequest
 	var err error
+	var userData entity.User
 
 	contentType := helpers.GetContentType(c)
-	if contentType == appJSON {
+	if contentType == helpers.AppJSON {
 		err = c.ShouldBindJSON(&updateUserDataRequest)
 	} else {
 		err = c.ShouldBind(&updateUserDataRequest)
@@ -106,21 +104,21 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 		return
 	}
 
-	userID, err := helpers.GetParamId(c, "userID")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "bad_request",
-			"message": err.Error(),
+	if value, ok := c.MustGet("userData").(entity.User); !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"err_message": "unauthorized",
 		})
 		return
+	} else {
+		userData = value
 	}
 
 	// ! TODO: Update error but data updated
-	response, err := u.userService.UpdateUserData(userID, &updateUserDataRequest)
-	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"error":   "unprocessable_entity",
-			"message": err.Error(),
+	response, err2 := u.userService.UpdateUserData(userData.ID, &updateUserDataRequest)
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
 		})
 		return
 	}
@@ -129,20 +127,21 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 }
 
 func (u *userRestHandler) DeleteUser(c *gin.Context) {
-	userID, err := helpers.GetParamId(c, "userID")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "bad_request",
-			"message": err.Error(),
+	var userData entity.User
+	if value, ok := c.MustGet("userData").(entity.User); !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"err_message": "unauthorized",
 		})
 		return
+	} else {
+		userData = value
 	}
 
-	response, err := u.userService.DeleteUser(userID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   "internal_server_error",
-			"message": err.Error(),
+	response, err2 := u.userService.DeleteUser(userData.ID)
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
 		})
 		return
 	}

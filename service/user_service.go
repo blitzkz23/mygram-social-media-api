@@ -42,7 +42,7 @@ func (u *userService) Login(userPayload *dto.LoginRequest) (*dto.LoginResponse, 
 
 	validPassword := user.VerifyPassword(userPayload.Password)
 	if !validPassword {
-		return nil, errs.NewNotAuthenticated("Invalid email or password")
+		return nil, errs.NewUnAuthorized("Invalid email or password")
 	}
 
 	token := user.GenerateToken()
@@ -72,13 +72,16 @@ func (u *userService) Register(userPayload *dto.RegisterRequest) (*dto.RegisterR
 		return nil, err
 	}
 
-	err = u.userRepo.Register(user)
+	user, err = u.userRepo.Register(user)
 	if err != nil {
 		return nil, err
 	}
 
 	response := &dto.RegisterResponse{
-		Message: "User data has been successfully registered",
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Age:      user.Age,
 	}
 
 	return response, nil
@@ -102,9 +105,11 @@ func (u *userService) UpdateUserData(userId uint, userPayload *dto.UpdateUserDat
 	fmt.Println("Data user", user.Email)
 
 	response := &dto.UpdateUserDataResponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Email:    user.Email,
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		Age:       user.Age,
+		UpdatedAt: user.UpdatedAt,
 	}
 
 	return response, nil

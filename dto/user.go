@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type LoginRequest struct {
 	Email    string `form:"email" json:"email" valid:"required~Email is required,email~Email is not valid"`
 	Password string `form:"password" json:"password" valid:"required~Password is required"`
@@ -17,7 +19,10 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	Message string `json:"message"`
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Age      uint8  `json:"age"`
 }
 
 type UpdateUserDataRequest struct {
@@ -26,11 +31,11 @@ type UpdateUserDataRequest struct {
 }
 
 type UpdateUserDataResponse struct {
-	ID        uint   `json:"id"`
-	Email     string `json:"email"`
-	Username  string `json:"username"`
-	Age       uint8  `json:"age"`
-	UpdatedAt string `json:"updated_at"`
+	ID        uint       `json:"id"`
+	Email     string     `json:"email"`
+	Username  string     `json:"username"`
+	Age       uint8      `json:"age"`
+	UpdatedAt *time.Time `json:"updated_at"`
 }
 
 type DeleteUserResponse struct {
