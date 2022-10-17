@@ -72,13 +72,16 @@ func (u *userService) Register(userPayload *dto.RegisterRequest) (*dto.RegisterR
 		return nil, err
 	}
 
-	err = u.userRepo.Register(user)
+	user, err = u.userRepo.Register(user)
 	if err != nil {
 		return nil, err
 	}
 
 	response := &dto.RegisterResponse{
-		Message: "User data has been successfully registered",
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Age:      user.Age,
 	}
 
 	return response, nil

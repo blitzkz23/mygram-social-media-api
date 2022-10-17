@@ -19,7 +19,10 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	Message string `json:"message"`
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Age      uint8  `json:"age"`
 }
 
 type UpdateUserDataRequest struct {

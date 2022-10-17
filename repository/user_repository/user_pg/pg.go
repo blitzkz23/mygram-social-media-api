@@ -44,14 +44,23 @@ func (u *userPG) Login(userPayload *entity.User) (*entity.User, errs.MessageErr)
 	return &user, nil
 }
 
-func (u *userPG) Register(userPayload *entity.User) errs.MessageErr {
-	err := u.db.Debug().Create(userPayload).Error
+func (u *userPG) Register(userPayload *entity.User) (*entity.User, errs.MessageErr) {
+	user := entity.User{}
 
+	err := u.db.Debug().Create(userPayload).Error
 	if err != nil {
-		return errs.NewInternalServerErrorr("Something went wrong")
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
 
-	return nil
+	err = u.db.Debug().Where("email = ?", userPayload.Email).Take(&user).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errs.NewNotFoundError("User not found")
+		}
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+
+	return &user, nil
 }
 
 func (u *userPG) UpdateUserData(userId uint, userPayload *entity.User) (*entity.User, errs.MessageErr) {
