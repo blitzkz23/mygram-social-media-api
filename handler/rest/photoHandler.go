@@ -81,5 +81,45 @@ func (p *photoRestHandler) GetAllPhotos(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, photos)
+}
 
+func (p *photoRestHandler) UpdatePhoto(c *gin.Context) {
+	var photoRequest dto.PhotoRequest
+	var err error
+
+	contentType := helpers.GetContentType(c)
+	if contentType == helpers.AppJSON {
+		err = c.ShouldBindJSON(&photoRequest)
+	} else {
+		err = c.ShouldBind(&photoRequest)
+	}
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "bad_request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	photoIdParam, err := helpers.GetParamId(c, "photoID")
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"err_message": "invalid params",
+		})
+		return
+	}
+
+	_ = photoIdParam
+
+	photo, err2 := p.photoService.EditPhotoData(photoIdParam, &photoRequest)
+	if err2 != nil {
+		c.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusAccepted, photo)
 }

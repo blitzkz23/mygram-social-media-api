@@ -1,6 +1,7 @@
 package photo_pg
 
 import (
+	"fmt"
 	"mygram-social-media-api/dto"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/errs"
@@ -57,16 +58,34 @@ func (p *photoPG) GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr) {
 	return photos, nil
 }
 
-func (p *photoPG) EditPhotoData(photoID uint, photoPayload *entity.Photo) (*entity.Photo, errs.MessageErr) {
+func (p *photoPG) GetPhotoByID(photoID uint) (*entity.Photo, errs.MessageErr) {
 	photo := entity.Photo{}
 
-	err := p.db.Debug().Model(photo).Where("id = ?", photoID).Updates(&photoPayload).Error
+	fmt.Println("APAKAH ADA ID DISINI", photoID)
+	err := p.db.Debug().Model(photo).Where("id = ?", photoID).First(&photo).Error
+	fmt.Println("APAKAH ADA ID DISINI 2", photoID, &photo)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("Photo not found")
 		}
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
+
+	return &photo, nil
+}
+
+func (p *photoPG) EditPhotoData(photoID uint, photoPayload *entity.Photo) (*entity.Photo, errs.MessageErr) {
+	photo := entity.Photo{}
+	fmt.Println("APAKAH ADA ID DISINI 3", photoID)
+
+	err := p.db.Debug().Model(photo).Where("id = ?", photoID).Updates(&photoPayload).Take(&photo).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errs.NewNotFoundError("Photo not found")
+		}
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+	fmt.Println("Melihat photo", &photo)
 
 	return &photo, nil
 }

@@ -27,7 +27,7 @@ func StartApp() {
 	photoService := service.NewPhotoService(photoRepo)
 	photoRestHandler := NewPhotoRestHandler(photoService)
 
-	authService := service.NewAuthService(userRepo)
+	authService := service.NewAuthService(userRepo, photoRepo)
 
 	// ! Routing
 	route := gin.Default()
@@ -45,6 +45,7 @@ func StartApp() {
 		photoRoute.Use(authService.Authentication())
 		photoRoute.POST("/post", photoRestHandler.PostPhoto)
 		photoRoute.GET("/", photoRestHandler.GetAllPhotos)
+		photoRoute.PUT("/update/:photoID", authService.PhotoAuthorization(), photoRestHandler.UpdatePhoto)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

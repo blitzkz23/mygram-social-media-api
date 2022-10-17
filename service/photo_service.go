@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"mygram-social-media-api/dto"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/errs"
@@ -11,8 +12,8 @@ import (
 type PhotoService interface {
 	PostPhoto(userID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoResponse, errs.MessageErr)
 	GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr)
-	EditPhotoData(photoPayload *dto.PhotoRequest) (*dto.PhotoRequest, errs.MessageErr)
-	DeletePhoto(photoId uint) *dto.DeletePhotoResponse
+	EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoUpdateResponse, errs.MessageErr)
+	DeletePhoto(photoID uint) *dto.DeletePhotoResponse
 }
 
 type photoService struct {
@@ -62,10 +63,37 @@ func (p *photoService) GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr)
 	return photos, nil
 }
 
-func (p *photoService) EditPhotoData(photoPayload *dto.PhotoRequest) (*dto.PhotoRequest, errs.MessageErr) {
-	return nil, nil
+func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoUpdateResponse, errs.MessageErr) {
+	err := helpers.ValidateStruct(photoPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	payload := &entity.Photo{
+		Title:    photoPayload.Title,
+		Caption:  photoPayload.Caption,
+		PhotoURL: photoPayload.PhotoURL,
+	}
+
+	photo, err := p.photoRepository.EditPhotoData(photoID, payload)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Melihat photo di service: ", photo)
+
+	response := &dto.PhotoUpdateResponse{
+		ID:        photo.ID,
+		Title:     photo.Title,
+		Caption:   photo.Caption,
+		PhotoURL:  photo.PhotoURL,
+		UserID:    photo.UserID,
+		UpdatedAt: photo.UpdatedAt,
+	}
+	fmt.Println("Melihat response di service: ", response)
+
+	return response, nil
 }
 
-func (p *photoService) DeletePhoto(photoId uint) *dto.DeletePhotoResponse {
+func (p *photoService) DeletePhoto(photoID uint) *dto.DeletePhotoResponse {
 	return nil
 }
