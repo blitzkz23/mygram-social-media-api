@@ -43,7 +43,6 @@ func (p *photoPG) GetAllPhotos() ([]*entity.Photo, errs.MessageErr) {
 	if err := p.db.Debug().Preload("User").Find(&photos).Error; err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
-	fmt.Println("Melihat photos", photos)
 
 	return photos, nil
 }
