@@ -19,7 +19,7 @@ func (p PhotoWithUser) ToGetPhotoResponseDTO() dto.GetPhotoResponse {
 		UserID:    p.Photo.UserID,
 		CreatedAt: p.Photo.CreatedAt,
 		UpdatedAt: p.Photo.UpdatedAt,
-		User: dto.UserResponse{
+		User: dto.EmbeddedUserResponse{
 			Username: p.User.Username,
 			Email:    p.User.Email,
 		},
