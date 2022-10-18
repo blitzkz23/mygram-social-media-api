@@ -5,6 +5,7 @@ import (
 	"mygram-social-media-api/pkg/helpers"
 	"mygram-social-media-api/repository/comment_repository"
 	"mygram-social-media-api/repository/photo_repository"
+	"mygram-social-media-api/repository/social_media_repository"
 	"mygram-social-media-api/repository/user_repository"
 	"net/http"
 
@@ -18,16 +19,18 @@ type AuthService interface {
 }
 
 type authService struct {
-	userRepository    user_repository.UserRepository
-	photoRepository   photo_repository.PhotoRepository
-	commentRepository comment_repository.CommentRepository
+	userRepository        user_repository.UserRepository
+	photoRepository       photo_repository.PhotoRepository
+	commentRepository     comment_repository.CommentRepository
+	socialMediaRepository social_media_repository.SocialMediaRepository
 }
 
-func NewAuthService(userRepository user_repository.UserRepository, photoRepository photo_repository.PhotoRepository, commentRepository comment_repository.CommentRepository) AuthService {
+func NewAuthService(userRepository user_repository.UserRepository, photoRepository photo_repository.PhotoRepository, commentRepository comment_repository.CommentRepository, socialMediaRepository social_media_repository.SocialMediaRepository) AuthService {
 	return &authService{
-		userRepository:    userRepository,
-		photoRepository:   photoRepository,
-		commentRepository: commentRepository,
+		userRepository:        userRepository,
+		photoRepository:       photoRepository,
+		commentRepository:     commentRepository,
+		socialMediaRepository: socialMediaRepository,
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"mygram-social-media-api/database"
 	"mygram-social-media-api/repository/comment_repository/comment_pg"
 	"mygram-social-media-api/repository/photo_repository/photo_pg"
+	"mygram-social-media-api/repository/social_media_repository/social_media_pg"
 	"mygram-social-media-api/repository/user_repository/user_pg"
 	"mygram-social-media-api/service"
 
@@ -32,7 +33,11 @@ func StartApp() {
 	commentService := service.NewCommentService(commentRepo)
 	commentRestHandler := NewCommentRestHandler(commentService)
 
-	authService := service.NewAuthService(userRepo, photoRepo, commentRepo)
+	socialMediaRepo := social_media_pg.NewSocialMediaPG(db)
+	socialMediaService := service.NewSocialMediaService(socialMediaRepo)
+	socialMediaRestHandler := NewSocialMediaRestHandler(socialMediaService)
+
+	authService := service.NewAuthService(userRepo, photoRepo, commentRepo, socialMediaRepo)
 
 	// ! Routing
 	route := gin.Default()
@@ -61,6 +66,12 @@ func StartApp() {
 		commentRoute.GET("/", commentRestHandler.GetAllComments)
 		commentRoute.PUT("/:commentID", authService.CommentAuthorization(), commentRestHandler.UpdateComment)
 		commentRoute.DELETE("/:commentID", authService.CommentAuthorization(), commentRestHandler.DeleteComment)
+	}
+
+	socialMediaRoute := route.Group("/socialmedias")
+	{
+		socialMediaRoute.Use(authService.Authentication())
+		socialMediaRoute.POST("/", socialMediaRestHandler.AddSocialMedia)
 	}
 
 	fmt.Println("Server running on PORT =>", port)
