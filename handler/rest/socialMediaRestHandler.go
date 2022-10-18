@@ -18,6 +18,16 @@ func NewSocialMediaRestHandler(socialMediaService service.SocialMediaService) *s
 	return &socialMediaRestHandler{socialMediaService: socialMediaService}
 }
 
+// AddSocialMedia godoc
+// @Tags socialmedias
+// @Description Add Social Media to your account
+// @ID add-social-media
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Param RequestBody body dto.SocialMediaRequest true "Add social media request body json"
+// @Success 200 {object} dto.SocialMediaResponse
+// @Router /socialmedias/ [post]
 func (s *socialMediaRestHandler) AddSocialMedia(c *gin.Context) {
 	var socialMediaRequest dto.SocialMediaRequest
 	var err error
@@ -59,6 +69,14 @@ func (s *socialMediaRestHandler) AddSocialMedia(c *gin.Context) {
 	c.JSON(http.StatusCreated, socialMedia)
 }
 
+// GetAllSocialMedias godoc
+// @Tags socialmedias
+// @Description Get all social medias
+// @ID get-social-medias
+// @Produce json
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Success 200 {object} dto.GetSocialMediaResponse
+// @Router /socialmedias/ [get]
 func (s *socialMediaRestHandler) GetAllSocialMedias(c *gin.Context) {
 	var userData entity.User
 	if value, ok := c.MustGet("userData").(entity.User); !ok {
@@ -83,6 +101,17 @@ func (s *socialMediaRestHandler) GetAllSocialMedias(c *gin.Context) {
 	c.JSON(http.StatusOK, socialMedia)
 }
 
+// EditSocialMediaData godoc
+// @Tags socialmedias
+// @Description Edit social media data
+// @ID edit-social-media
+// @Accept  json
+// @Produce json
+// @Param socialMediaID path uint true "social media's id"
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Param RequestBody body dto.SocialMediaRequest true "Edit social media request body json"
+// @Success 200 {object} dto.UpdateSocialMediaResponse
+// @Router /socialmedias/{socialMediaID} [put]
 func (s *socialMediaRestHandler) EditSocialMediaData(c *gin.Context) {
 	var socialMediaRequest dto.SocialMediaRequest
 	var err error
@@ -133,6 +162,15 @@ func (s *socialMediaRestHandler) EditSocialMediaData(c *gin.Context) {
 	c.JSON(http.StatusOK, socialMedia)
 }
 
+// DeleteSocialMediaData godoc
+// @Tags socialmedias
+// @Description Delete social media data
+// @ID delete-social-media
+// @Produce json
+// @Param socialMediaID path uint true "social media's id"
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Success 200 {object} dto.DeleteSocialMediaResponse
+// @Router /socialmedias/{socialMediaID} [delete]
 func (s *socialMediaRestHandler) DeleteSocialMedia(c *gin.Context) {
 	var userData entity.User
 	if value, ok := c.MustGet("userData").(entity.User); !ok {
