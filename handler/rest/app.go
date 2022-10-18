@@ -72,6 +72,9 @@ func StartApp() {
 	{
 		socialMediaRoute.Use(authService.Authentication())
 		socialMediaRoute.POST("/", socialMediaRestHandler.AddSocialMedia)
+		socialMediaRoute.GET("/", socialMediaRestHandler.GetAllSocialMedias)
+		socialMediaRoute.PUT("/:socialMediaID", authService.SocialMediaAuthorization(), socialMediaRestHandler.EditSocialMediaData)
+		socialMediaRoute.DELETE("/:socialMediaID", authService.SocialMediaAuthorization(), socialMediaRestHandler.DeleteSocialMedia)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

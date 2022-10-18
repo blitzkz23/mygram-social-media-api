@@ -31,7 +31,7 @@ type GetSocialMediaResponse struct {
 	User           EmbeddedUser
 }
 
-type EditSocialMediaResponse struct {
+type UpdateSocialMediaResponse struct {
 	ID             uint       `json:"id"`
 	Name           string     `json:"name"`
 	SocialMediaURL string     `json:"social_media_url"`

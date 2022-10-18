@@ -109,7 +109,7 @@ func (p *photoService) DeletePhoto(photoID uint) (*dto.DeletePhotoResponse, errs
 	}
 
 	response := &dto.DeletePhotoResponse{
-		Message: "Photo has been deleted",
+		Message: "Your photo has been deleted",
 	}
 
 	fmt.Println("Melihat response di service: ", response)

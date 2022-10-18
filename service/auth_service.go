@@ -16,6 +16,7 @@ type AuthService interface {
 	Authentication() gin.HandlerFunc
 	PhotoAuthorization() gin.HandlerFunc
 	CommentAuthorization() gin.HandlerFunc
+	SocialMediaAuthorization() gin.HandlerFunc
 }
 
 type authService struct {
@@ -131,6 +132,44 @@ func (a *authService) CommentAuthorization() gin.HandlerFunc {
 		}
 
 		if comment.UserID != userData.ID {
+			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+				"err_message": "forbidden access",
+			})
+			return
+		}
+	})
+}
+
+func (a *authService) SocialMediaAuthorization() gin.HandlerFunc {
+	return gin.HandlerFunc(func(ctx *gin.Context) {
+		var userData entity.User
+
+		if value, ok := ctx.MustGet("userData").(entity.User); !ok {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error_message": "unauthorized",
+			})
+			return
+		} else {
+			userData = value
+		}
+
+		socialMediaIdParam, err := helpers.GetParamId(ctx, "socialMediaID")
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"err_message": "invalid params",
+			})
+			return
+		}
+
+		socialMedia, err := a.socialMediaRepository.GetSocialMediaByID(socialMediaIdParam)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"err_message": "social media not found",
+			})
+			return
+		}
+
+		if socialMedia.UserID != userData.ID {
 			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{
 				"err_message": "forbidden access",
 			})
