@@ -58,6 +58,7 @@ func StartApp() {
 	{
 		commentRoute.Use(authService.Authentication())
 		commentRoute.POST("/", commentRestHandler.PostComment)
+		commentRoute.GET("/", commentRestHandler.GetAllComments)
 	}
 
 	fmt.Println("Server running on PORT =>", port)

@@ -34,7 +34,7 @@ func (c *commentPG) PostComment(commentPayload *entity.Comment) (*entity.Comment
 func (c *commentPG) GetAllComments() ([]*entity.Comment, errs.MessageErr) {
 	comments := []*entity.Comment{}
 
-	err := c.db.Preload("User").Preload("Post").Find(&comments).Error
+	err := c.db.Preload("User").Preload("Photo").Find(&comments).Error
 	if err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}

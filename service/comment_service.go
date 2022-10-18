@@ -10,7 +10,7 @@ import (
 
 type CommentService interface {
 	PostComment(userID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr)
-	GetAllComments() ([]*dto.CommentResponse, errs.MessageErr)
+	GetAllComments() ([]*dto.GetCommentResponse, errs.MessageErr)
 	GetCommentByID(commentID uint) (*dto.CommentResponse, errs.MessageErr)
 	EditCommentData(commentID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr)
 	DeleteComment(commentID uint) errs.MessageErr
@@ -51,8 +51,18 @@ func (c *commentService) PostComment(userID uint, commentPayload *dto.CommentReq
 	return response, nil
 }
 
-func (c *commentService) GetAllComments() ([]*dto.CommentResponse, errs.MessageErr) {
-	return nil, nil
+func (c *commentService) GetAllComments() ([]*dto.GetCommentResponse, errs.MessageErr) {
+	comments, err := c.commentRepository.GetAllComments()
+	if err != nil {
+		return nil, err
+	}
+
+	response := make([]*dto.GetCommentResponse, 0)
+	for _, comment := range comments {
+		response = append(response, comment.ToGetCommentResponseDTO())
+	}
+
+	return response, nil
 }
 
 func (c *commentService) GetCommentByID(commentID uint) (*dto.CommentResponse, errs.MessageErr) {

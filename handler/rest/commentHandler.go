@@ -57,3 +57,27 @@ func (c *commentRestHandler) PostComment(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, comment)
 }
+
+func (c *commentRestHandler) GetAllComments(ctx *gin.Context) {
+	var userData entity.User
+	if value, ok := ctx.MustGet("userData").(entity.User); !ok {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"err_message": "unauthorized",
+		})
+		return
+	} else {
+		userData = value
+	}
+	_ = userData
+
+	comments, err := c.commentService.GetAllComments()
+	if err != nil {
+		ctx.JSON(err.Status(), gin.H{
+			"error":   err.Error(),
+			"message": err.Message(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, comments)
+}
