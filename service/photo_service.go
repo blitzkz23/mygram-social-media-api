@@ -84,7 +84,6 @@ func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoReques
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Melihat photo di service: ", photo)
 
 	response := &dto.PhotoUpdateResponse{
 		ID:        photo.ID,
@@ -94,7 +93,6 @@ func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoReques
 		UserID:    photo.UserID,
 		UpdatedAt: photo.UpdatedAt,
 	}
-	fmt.Println("Melihat response di service: ", response)
 
 	return response, nil
 }
