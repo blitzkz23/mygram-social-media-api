@@ -99,7 +99,7 @@ func (c *commentService) DeleteComment(commentID uint) (*dto.DeleteCommentRespon
 	}
 
 	response := &dto.DeleteCommentResponse{
-		Message: "Comment deleted successfully",
+		Message: "Your comment has been deleted",
 	}
 
 	return response, nil
