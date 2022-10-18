@@ -13,7 +13,7 @@ type CommentService interface {
 	PostComment(userID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr)
 	GetAllComments() ([]*dto.GetCommentResponse, errs.MessageErr)
 	EditCommentData(commentID uint, commentPayload *dto.EditCommentRequest) (*dto.EditCommentResponse, errs.MessageErr)
-	DeleteComment(commentID uint) errs.MessageErr
+	DeleteComment(commentID uint) (*dto.DeleteCommentResponse, errs.MessageErr)
 }
 
 type commentService struct {
@@ -93,6 +93,14 @@ func (c *commentService) EditCommentData(commentID uint, commentPayload *dto.Edi
 	return response, nil
 }
 
-func (c *commentService) DeleteComment(commentID uint) errs.MessageErr {
-	return nil
+func (c *commentService) DeleteComment(commentID uint) (*dto.DeleteCommentResponse, errs.MessageErr) {
+	if err := c.commentRepository.DeleteComment(commentID); err != nil {
+		return nil, err
+	}
+
+	response := &dto.DeleteCommentResponse{
+		Message: "Comment deleted successfully",
+	}
+
+	return response, nil
 }

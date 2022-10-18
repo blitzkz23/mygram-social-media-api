@@ -130,5 +130,36 @@ func (c *commentRestHandler) UpdateComment(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, comment)
+}
 
+func (c *commentRestHandler) DeleteComment(ctx *gin.Context) {
+	var userData entity.User
+	if value, ok := ctx.MustGet("userData").(entity.User); !ok {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"err_message": "unauthorized",
+		})
+		return
+	} else {
+		userData = value
+	}
+	_ = userData
+
+	commentIdParam, err := helpers.GetParamId(ctx, "commentID")
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"err_message": "invalid params",
+		})
+		return
+	}
+
+	res, err2 := c.commentService.DeleteComment(commentIdParam)
+	if err2 != nil {
+		ctx.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }

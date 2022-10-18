@@ -60,6 +60,7 @@ func StartApp() {
 		commentRoute.POST("/", commentRestHandler.PostComment)
 		commentRoute.GET("/", commentRestHandler.GetAllComments)
 		commentRoute.PUT("/:commentID", authService.CommentAuthorization(), commentRestHandler.UpdateComment)
+		commentRoute.DELETE("/:commentID", authService.CommentAuthorization(), commentRestHandler.DeleteComment)
 	}
 
 	fmt.Println("Server running on PORT =>", port)
