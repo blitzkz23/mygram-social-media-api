@@ -16,22 +16,58 @@ func NewCommentPG(db *gorm.DB) comment_repository.CommentRepository {
 	return &commentPG{db: db}
 }
 
-func (c *commentPG) PostComment(comment *entity.Comment) (*entity.Comment, errs.MessageErr) {
-	return nil, nil
+func (c *commentPG) PostComment(commentPayload *entity.Comment) (*entity.Comment, errs.MessageErr) {
+	comment := entity.Comment{}
+	comment.UserID = commentPayload.UserID
+
+	if err := c.db.Model(&comment).Create(&commentPayload).Error; err != nil {
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+
+	if err := c.db.Last(&comment).Error; err != nil {
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+
+	return &comment, nil
 }
 
 func (c *commentPG) GetAllComments() ([]*entity.Comment, errs.MessageErr) {
-	return nil, nil
+	comments := []*entity.Comment{}
+
+	err := c.db.Preload("User").Preload("Post").Find(&comments).Error
+	if err != nil {
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+
+	return comments, nil
 }
 
 func (c *commentPG) GetCommentByID(commentID uint) (*entity.Comment, errs.MessageErr) {
-	return nil, nil
+	comment := entity.Comment{}
+
+	if err := c.db.Where("id = ?", commentID).First(&comment).Error; err != nil {
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+
+	return &comment, nil
 }
 
-func (c *commentPG) EditCommentData(commentID uint, comment *entity.Comment) (*entity.Comment, errs.MessageErr) {
-	return nil, nil
+func (c *commentPG) EditCommentData(commentID uint, commentPayload *entity.Comment) (*entity.Comment, errs.MessageErr) {
+	comment := entity.Comment{}
+
+	if err := c.db.Where("id = ?", commentID).Updates(&commentPayload).Error; err != nil {
+		return nil, errs.NewInternalServerErrorr("Something went wrong")
+	}
+
+	return &comment, nil
 }
 
 func (c *commentPG) DeleteComment(commentID uint) errs.MessageErr {
+	comment := entity.Comment{}
+
+	if err := c.db.Where("id = ?", commentID).Delete(&comment).Error; err != nil {
+		return errs.NewInternalServerErrorr("Something went wrong")
+	}
+
 	return nil
 }

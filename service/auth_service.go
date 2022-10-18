@@ -1,9 +1,9 @@
 package service
 
 import (
-	"fmt"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/helpers"
+	"mygram-social-media-api/repository/comment_repository"
 	"mygram-social-media-api/repository/photo_repository"
 	"mygram-social-media-api/repository/user_repository"
 	"net/http"
@@ -17,14 +17,16 @@ type AuthService interface {
 }
 
 type authService struct {
-	userRepository  user_repository.UserRepository
-	photoRepository photo_repository.PhotoRepository
+	userRepository    user_repository.UserRepository
+	photoRepository   photo_repository.PhotoRepository
+	commentRepository comment_repository.CommentRepository
 }
 
-func NewAuthService(userRepository user_repository.UserRepository, photoRepository photo_repository.PhotoRepository) AuthService {
+func NewAuthService(userRepository user_repository.UserRepository, photoRepository photo_repository.PhotoRepository, commentRepository comment_repository.CommentRepository) AuthService {
 	return &authService{
-		userRepository:  userRepository,
-		photoRepository: photoRepository,
+		userRepository:    userRepository,
+		photoRepository:   photoRepository,
+		commentRepository: commentRepository,
 	}
 }
 
@@ -75,7 +77,6 @@ func (a *authService) PhotoAuthorization() gin.HandlerFunc {
 			})
 			return
 		}
-		fmt.Println("Apakah ada ID", photoIdParam)
 
 		photo, err := a.photoRepository.GetPhotoByID(photoIdParam)
 		if err != nil {
@@ -84,7 +85,6 @@ func (a *authService) PhotoAuthorization() gin.HandlerFunc {
 			})
 			return
 		}
-		fmt.Println("Apakah ada photo", &photo)
 
 		if photo.UserID != userData.ID {
 			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{
