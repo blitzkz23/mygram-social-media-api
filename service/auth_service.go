@@ -14,6 +14,7 @@ import (
 type AuthService interface {
 	Authentication() gin.HandlerFunc
 	PhotoAuthorization() gin.HandlerFunc
+	CommentAuthorization() gin.HandlerFunc
 }
 
 type authService struct {
@@ -94,5 +95,43 @@ func (a *authService) PhotoAuthorization() gin.HandlerFunc {
 		}
 
 		ctx.Next()
+	})
+}
+
+func (a *authService) CommentAuthorization() gin.HandlerFunc {
+	return gin.HandlerFunc(func(ctx *gin.Context) {
+		var userData entity.User
+
+		if value, ok := ctx.MustGet("userData").(entity.User); !ok {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error_message": "unauthorized",
+			})
+			return
+		} else {
+			userData = value
+		}
+
+		commentIdParam, err := helpers.GetParamId(ctx, "commentID")
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"err_message": "invalid params",
+			})
+			return
+		}
+
+		comment, err := a.commentRepository.GetCommentByID(commentIdParam)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"err_message": "comment not found",
+			})
+			return
+		}
+
+		if comment.UserID != userData.ID {
+			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+				"err_message": "forbidden access",
+			})
+			return
+		}
 	})
 }

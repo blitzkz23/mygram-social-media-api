@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"mygram-social-media-api/dto"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/errs"
@@ -11,8 +12,7 @@ import (
 type CommentService interface {
 	PostComment(userID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr)
 	GetAllComments() ([]*dto.GetCommentResponse, errs.MessageErr)
-	GetCommentByID(commentID uint) (*dto.CommentResponse, errs.MessageErr)
-	EditCommentData(commentID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr)
+	EditCommentData(commentID uint, commentPayload *dto.EditCommentRequest) (*dto.EditCommentResponse, errs.MessageErr)
 	DeleteComment(commentID uint) errs.MessageErr
 }
 
@@ -29,13 +29,13 @@ func (c *commentService) PostComment(userID uint, commentPayload *dto.CommentReq
 		return nil, err
 	}
 
-	payload := &entity.Comment{
+	entity := &entity.Comment{
 		Message: commentPayload.Message,
 		PhotoID: commentPayload.PhotoID,
 		UserID:  userID,
 	}
 
-	comment, err := c.commentRepository.PostComment(payload)
+	comment, err := c.commentRepository.PostComment(entity)
 	if err != nil {
 		return nil, err
 	}
@@ -65,12 +65,32 @@ func (c *commentService) GetAllComments() ([]*dto.GetCommentResponse, errs.Messa
 	return response, nil
 }
 
-func (c *commentService) GetCommentByID(commentID uint) (*dto.CommentResponse, errs.MessageErr) {
-	return nil, nil
-}
+func (c *commentService) EditCommentData(commentID uint, commentPayload *dto.EditCommentRequest) (*dto.EditCommentResponse, errs.MessageErr) {
+	err := helpers.ValidateStruct(commentPayload)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Payload di service: ", commentPayload)
 
-func (c *commentService) EditCommentData(commentID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr) {
-	return nil, nil
+	entity := &entity.Comment{
+		Message: commentPayload.Message,
+	}
+
+	comment, err := c.commentRepository.EditCommentData(commentID, entity)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &dto.EditCommentResponse{
+		ID:        comment.ID,
+		Message:   comment.Message,
+		PhotoID:   comment.PhotoID,
+		UserID:    comment.UserID,
+		CreatedAt: comment.CreatedAt,
+		UpdatedAt: comment.UpdatedAt,
+	}
+
+	return response, nil
 }
 
 func (c *commentService) DeleteComment(commentID uint) errs.MessageErr {

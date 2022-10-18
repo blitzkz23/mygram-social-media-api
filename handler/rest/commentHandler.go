@@ -81,3 +81,54 @@ func (c *commentRestHandler) GetAllComments(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, comments)
 }
+
+func (c *commentRestHandler) UpdateComment(ctx *gin.Context) {
+	var commentRequest dto.EditCommentRequest
+	var userData entity.User
+	var err error
+
+	contentType := helpers.GetContentType(ctx)
+	if contentType == helpers.AppJSON {
+		err = ctx.ShouldBindJSON(&commentRequest)
+	} else {
+		err = ctx.ShouldBind(&commentRequest)
+	}
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "bad_request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if value, ok := ctx.MustGet("userData").(entity.User); !ok {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"err_message": "unauthorized",
+		})
+		return
+	} else {
+		userData = value
+	}
+	_ = userData
+
+	commentIdParam, err := helpers.GetParamId(ctx, "commentID")
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"err_message": "invalid params",
+		})
+		return
+	}
+
+	comment, err2 := c.commentService.EditCommentData(commentIdParam, &commentRequest)
+	if err2 != nil {
+		ctx.JSON(err2.Status(), gin.H{
+			"error":   err2.Error(),
+			"message": err2.Message(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, comment)
+
+}

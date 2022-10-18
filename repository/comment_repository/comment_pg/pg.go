@@ -1,6 +1,7 @@
 package comment_pg
 
 import (
+	"fmt"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/errs"
 	"mygram-social-media-api/repository/comment_repository"
@@ -54,8 +55,13 @@ func (c *commentPG) GetCommentByID(commentID uint) (*entity.Comment, errs.Messag
 
 func (c *commentPG) EditCommentData(commentID uint, commentPayload *entity.Comment) (*entity.Comment, errs.MessageErr) {
 	comment := entity.Comment{}
+	fmt.Println("Melihat payload", commentPayload)
 
-	if err := c.db.Where("id = ?", commentID).Updates(&commentPayload).Error; err != nil {
+	err := c.db.Model(&comment).Where("id = ?", commentID).Updates(&commentPayload).Take(&comment).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errs.NewNotFoundError("Comment not found")
+		}
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
 
