@@ -12,7 +12,7 @@ import (
 type PhotoService interface {
 	PostPhoto(userID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoResponse, errs.MessageErr)
 	GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr)
-	EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoUpdateResponse, errs.MessageErr)
+	EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.UpdatePhotoResponse, errs.MessageErr)
 	DeletePhoto(photoID uint) (*dto.DeletePhotoResponse, errs.MessageErr)
 }
 
@@ -68,7 +68,7 @@ func (p *photoService) GetAllPhotos() ([]*dto.GetPhotoResponse, errs.MessageErr)
 	return dto, nil
 }
 
-func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.PhotoUpdateResponse, errs.MessageErr) {
+func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoRequest) (*dto.UpdatePhotoResponse, errs.MessageErr) {
 	err := helpers.ValidateStruct(photoPayload)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (p *photoService) EditPhotoData(photoID uint, photoPayload *dto.PhotoReques
 		return nil, err
 	}
 
-	response := &dto.PhotoUpdateResponse{
+	response := &dto.UpdatePhotoResponse{
 		ID:        photo.ID,
 		Title:     photo.Title,
 		Caption:   photo.Caption,

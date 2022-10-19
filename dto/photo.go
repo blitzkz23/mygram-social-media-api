@@ -17,7 +17,7 @@ type PhotoResponse struct {
 	CreatedAt *time.Time `json:"created_at"`
 }
 
-type PhotoUpdateResponse struct {
+type UpdatePhotoResponse struct {
 	ID        uint       `json:"id"`
 	Title     string     `json:"title"`
 	Caption   string     `json:"caption"`

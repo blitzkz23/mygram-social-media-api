@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 	"mygram-social-media-api/database"
+	"mygram-social-media-api/docs"
 	"mygram-social-media-api/repository/comment_repository/comment_pg"
 	"mygram-social-media-api/repository/photo_repository/photo_pg"
 	"mygram-social-media-api/repository/social_media_repository/social_media_pg"
@@ -10,6 +11,8 @@ import (
 	"mygram-social-media-api/service"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 const (
@@ -76,6 +79,16 @@ func StartApp() {
 		socialMediaRoute.PUT("/:socialMediaID", authService.SocialMediaAuthorization(), socialMediaRestHandler.EditSocialMediaData)
 		socialMediaRoute.DELETE("/:socialMediaID", authService.SocialMediaAuthorization(), socialMediaRestHandler.DeleteSocialMedia)
 	}
+
+	// ! Docs
+	docs.SwaggerInfo.Title = "MyGrams API"
+	docs.SwaggerInfo.Description = "MyGrams merupakan API Social Media yang dibuat dengan menggunakan Golang, Gin-Gonic, dan PostgreSQL serta pattern DDD."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:8080"
+	// docs.SwaggerInfo.BasePath = "/v2"
+	docs.SwaggerInfo.Schemes = []string{"http"}
+
+	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	fmt.Println("Server running on PORT =>", port)
 	route.Run(port)
