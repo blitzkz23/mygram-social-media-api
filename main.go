@@ -1,7 +1,7 @@
 package main
 
-import "mygram-social-media-api/database"
+import "mygram-social-media-api/handler/rest"
 
 func main() {
-	database.StartDB()
+	rest.StartApp()
 }
