@@ -21,7 +21,7 @@ func NewPhotoPG(db *gorm.DB) photo_repository.PhotoRepository {
 func (p *photoPG) PostPhoto(photoPayload *entity.Photo) (*entity.Photo, errs.MessageErr) {
 	photo := entity.Photo{}
 
-	err := p.db.Debug().Model(photo).Create(&photoPayload).Error
+	err := p.db.Model(photo).Create(&photoPayload).Error
 	if err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
@@ -40,7 +40,7 @@ func (p *photoPG) PostPhoto(photoPayload *entity.Photo) (*entity.Photo, errs.Mes
 func (p *photoPG) GetAllPhotos() ([]*entity.Photo, errs.MessageErr) {
 	photos := []*entity.Photo{}
 
-	if err := p.db.Debug().Preload("User").Find(&photos).Error; err != nil {
+	if err := p.db.Preload("User").Find(&photos).Error; err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
 
@@ -50,7 +50,7 @@ func (p *photoPG) GetAllPhotos() ([]*entity.Photo, errs.MessageErr) {
 func (p *photoPG) GetPhotoByID(photoID uint) (*entity.Photo, errs.MessageErr) {
 	photo := entity.Photo{}
 
-	err := p.db.Debug().Model(photo).Where("id = ?", photoID).First(&photo).Error
+	err := p.db.Model(photo).Where("id = ?", photoID).First(&photo).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("Photo not found")

@@ -19,7 +19,7 @@ func NewUserPG(db *gorm.DB) user_repository.UserRepository {
 func (u *userPG) GetUserByIDAndEmail(userPayload *entity.User) (*entity.User, errs.MessageErr) {
 	user := entity.User{}
 
-	err := u.db.Debug().Where("email = ? AND id = ?", userPayload.Email, userPayload.ID).Take(&user).Error
+	err := u.db.Where("email = ? AND id = ?", userPayload.Email, userPayload.ID).Take(&user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("User not found")
@@ -33,7 +33,7 @@ func (u *userPG) GetUserByIDAndEmail(userPayload *entity.User) (*entity.User, er
 func (u *userPG) Login(userPayload *entity.User) (*entity.User, errs.MessageErr) {
 	user := entity.User{}
 
-	err := u.db.Debug().Where("email = ?", userPayload.Email).Take(&user).Error
+	err := u.db.Where("email = ?", userPayload.Email).Take(&user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("User not found")
@@ -47,12 +47,12 @@ func (u *userPG) Login(userPayload *entity.User) (*entity.User, errs.MessageErr)
 func (u *userPG) Register(userPayload *entity.User) (*entity.User, errs.MessageErr) {
 	user := entity.User{}
 
-	err := u.db.Debug().Create(userPayload).Error
+	err := u.db.Create(userPayload).Error
 	if err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
 
-	err = u.db.Debug().Where("email = ?", userPayload.Email).Take(&user).Error
+	err = u.db.Where("email = ?", userPayload.Email).Take(&user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errs.NewNotFoundError("User not found")
@@ -66,7 +66,7 @@ func (u *userPG) Register(userPayload *entity.User) (*entity.User, errs.MessageE
 func (u *userPG) UpdateUserData(userId uint, userPayload *entity.User) (*entity.User, errs.MessageErr) {
 	user := entity.User{}
 
-	err := u.db.Debug().Model(user).Where("id = ?", userId).Updates(userPayload).Take(&user).Error
+	err := u.db.Model(user).Where("id = ?", userId).Updates(userPayload).Take(&user).Error
 	if err != nil {
 		return nil, errs.NewInternalServerErrorr("Something went wrong")
 	}
@@ -77,7 +77,7 @@ func (u *userPG) UpdateUserData(userId uint, userPayload *entity.User) (*entity.
 func (u *userPG) DeleteUser(userId uint) errs.MessageErr {
 	user := entity.User{}
 
-	err := u.db.Debug().Where("id = ?", userId).Delete(&user).Error
+	err := u.db.Where("id = ?", userId).Delete(&user).Error
 	if err != nil {
 		return errs.NewInternalServerErrorr("Something went wrong")
 	}
