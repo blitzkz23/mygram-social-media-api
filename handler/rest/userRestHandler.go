@@ -114,7 +114,7 @@ func (u *userRestHandler) Register(c *gin.Context) {
 // @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 // @Param RequestBody body dto.UpdateUserDataRequest true "Update user request body json"
 // @Success 200 {object} dto.UpdateUserDataResponse
-// @Router /users/ [put]
+// @Router /users [put]
 func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 	var updateUserDataRequest dto.UpdateUserDataRequest
 	var err error
@@ -165,7 +165,7 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 // @Produce json
 // @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 // @Success 200 {object} dto.DeleteUserResponse
-// @Router /users/ [delete]
+// @Router /users [delete]
 func (u *userRestHandler) DeleteUser(c *gin.Context) {
 	var userData entity.User
 	if value, ok := c.MustGet("userData").(entity.User); !ok {

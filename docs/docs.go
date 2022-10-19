@@ -332,7 +332,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/socialmedias/": {
+        "/socialmedias": {
             "get": {
                 "description": "Get all social medias",
                 "produces": [
@@ -490,7 +490,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/": {
+        "/users": {
             "put": {
                 "description": "Update user data",
                 "consumes": [

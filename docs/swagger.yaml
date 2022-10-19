@@ -475,7 +475,7 @@ paths:
       summary: Update existing photo data
       tags:
       - photos
-  /socialmedias/:
+  /socialmedias:
     get:
       description: Get all social medias
       operationId: get-social-medias
@@ -583,7 +583,7 @@ paths:
       summary: Edit existing social media data
       tags:
       - socialmedias
-  /users/:
+  /users:
     delete:
       description: Delete user data
       operationId: delete-user

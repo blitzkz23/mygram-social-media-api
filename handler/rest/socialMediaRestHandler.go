@@ -28,7 +28,7 @@ func NewSocialMediaRestHandler(socialMediaService service.SocialMediaService) *s
 // @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 // @Param RequestBody body dto.SocialMediaRequest true "Add social media request body json"
 // @Success 201 {object} dto.SocialMediaResponse
-// @Router /socialmedias/ [post]
+// @Router /socialmedias [post]
 func (s *socialMediaRestHandler) AddSocialMedia(c *gin.Context) {
 	var socialMediaRequest dto.SocialMediaRequest
 	var err error
@@ -78,7 +78,7 @@ func (s *socialMediaRestHandler) AddSocialMedia(c *gin.Context) {
 // @Produce json
 // @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 // @Success 200 {object} dto.GetSocialMediaResponse
-// @Router /socialmedias/ [get]
+// @Router /socialmedias [get]
 func (s *socialMediaRestHandler) GetAllSocialMedias(c *gin.Context) {
 	var userData entity.User
 	if value, ok := c.MustGet("userData").(entity.User); !ok {

@@ -320,7 +320,7 @@
                 }
             }
         },
-        "/socialmedias/": {
+        "/socialmedias": {
             "get": {
                 "description": "Get all social medias",
                 "produces": [
@@ -478,7 +478,7 @@
                 }
             }
         },
-        "/users/": {
+        "/users": {
             "put": {
                 "description": "Update user data",
                 "consumes": [
