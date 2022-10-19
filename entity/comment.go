@@ -1,9 +1,6 @@
 package entity
 
-import (
-	"github.com/asaskevich/govalidator"
-	"github.com/jinzhu/gorm"
-)
+import "mygram-social-media-api/dto"
 
 type Comment struct {
 	GormModel
@@ -14,12 +11,25 @@ type Comment struct {
 	Photo   *Photo
 }
 
-func (c *Comment) BeforeCreate(tx *gorm.DB) (err error) {
-	_, errCreate := govalidator.ValidateStruct(c)
-	if errCreate != nil {
-		err = errCreate
-		return
+func (c *Comment) ToGetCommentResponseDTO() *dto.GetCommentResponse {
+	return &dto.GetCommentResponse{
+		ID:        c.ID,
+		Message:   c.Message,
+		PhotoID:   c.PhotoID,
+		UserID:    c.UserID,
+		CreatedAt: c.CreatedAt,
+		UpdatedAt: c.UpdatedAt,
+		User: dto.EmbeddedUserResponse{
+			ID:       c.User.ID,
+			Username: c.User.Username,
+			Email:    c.User.Email,
+		},
+		Photo: dto.EmbeddedPhotoResponse{
+			ID:       c.Photo.ID,
+			Title:    c.Photo.Title,
+			Caption:  c.Photo.Caption,
+			PhotoURL: c.Photo.PhotoURL,
+			UserID:   c.Photo.UserID,
+		},
 	}
-	err = nil
-	return
 }

@@ -1,0 +1,681 @@
+definitions:
+  dto.CommentRequest:
+    properties:
+      message:
+        type: string
+      photo_id:
+        type: integer
+    type: object
+  dto.CommentResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      photo_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  dto.DeleteCommentResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.DeletePhotoResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.DeleteSocialMediaResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.DeleteUserResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.EmbeddedPhotoResponse:
+    properties:
+      caption:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.EmbeddedUser:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  dto.EmbeddedUserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  dto.GetCommentResponse:
+    properties:
+      Photo:
+        $ref: '#/definitions/dto.EmbeddedPhotoResponse'
+      User:
+        $ref: '#/definitions/dto.EmbeddedUserResponse'
+      created_at:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      photo_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.GetPhotoResponse:
+    properties:
+      User:
+        $ref: '#/definitions/dto.EmbeddedUserResponse'
+      caption:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.GetSocialMediaResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      social_media_url:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/dto.EmbeddedUser'
+      user_id:
+        type: integer
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.LoginResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
+  dto.PhotoRequest:
+    properties:
+      caption:
+        type: string
+      photo_url:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.RegisterResponse:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  dto.SocialMediaRequest:
+    properties:
+      name:
+        type: string
+      social_media_url:
+        type: string
+    type: object
+  dto.SocialMediaResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      social_media_url:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.UpdateCommentRequest:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.UpdateCommentResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      photo_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.UpdatePhotoResponse:
+    properties:
+      caption:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.UpdateSocialMediaResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      social_media_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.UpdateUserDataRequest:
+    properties:
+      email:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UpdateUserDataResponse:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /comments:
+    get:
+      description: Get all comments
+      operationId: get-all-comments
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetCommentResponse'
+      summary: Get all comments
+      tags:
+      - comments
+    post:
+      consumes:
+      - application/json
+      description: Post new comment on photo
+      operationId: post-comment
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post comment request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CommentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CommentResponse'
+      summary: Post new comment on photo
+      tags:
+      - comments
+  /comments/{commentID}:
+    delete:
+      description: Delete comment
+      operationId: delete-comment
+      parameters:
+      - description: comments's id
+        in: path
+        name: commentID
+        required: true
+        type: integer
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteCommentResponse'
+      summary: Delete existing comment
+      tags:
+      - comments
+    put:
+      consumes:
+      - application/json
+      description: Update comment
+      operationId: update-comment
+      parameters:
+      - description: comments's id
+        in: path
+        name: commentID
+        required: true
+        type: integer
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Edit photo request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateCommentResponse'
+      summary: Update existing comment
+      tags:
+      - comments
+  /photos:
+    get:
+      description: Get all photos
+      operationId: get-all-photos
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetPhotoResponse'
+      summary: Get all photos
+      tags:
+      - photos
+    post:
+      consumes:
+      - application/json
+      description: Post a new photo
+      operationId: post-photo
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add photo request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PhotoRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UpdatePhotoResponse'
+      summary: Post a new photo
+      tags:
+      - photos
+  /photos/{photoID}:
+    delete:
+      description: Delete photo
+      operationId: delete-photo
+      parameters:
+      - description: photo's id
+        in: path
+        name: photoID
+        required: true
+        type: integer
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeletePhotoResponse'
+      summary: Delete existing photo
+      tags:
+      - photos
+    put:
+      consumes:
+      - application/json
+      description: Update photo data
+      operationId: update-photo
+      parameters:
+      - description: photo's id
+        in: path
+        name: photoID
+        required: true
+        type: integer
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Edit photo request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PhotoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdatePhotoResponse'
+      summary: Update existing photo data
+      tags:
+      - photos
+  /socialmedias:
+    get:
+      description: Get all social medias
+      operationId: get-social-medias
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetSocialMediaResponse'
+      summary: Get all social media datas
+      tags:
+      - socialmedias
+    post:
+      consumes:
+      - application/json
+      description: Add Social Media to your account
+      operationId: add-social-media
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add social media request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SocialMediaRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.SocialMediaResponse'
+      summary: Add social media data to user's account
+      tags:
+      - socialmedias
+  /socialmedias/{socialMediaID}:
+    delete:
+      description: Delete social media data
+      operationId: delete-social-media
+      parameters:
+      - description: social media's id
+        in: path
+        name: socialMediaID
+        required: true
+        type: integer
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteSocialMediaResponse'
+      summary: Delete existing social media data
+      tags:
+      - socialmedias
+    put:
+      consumes:
+      - application/json
+      description: Edit social media data
+      operationId: edit-social-media
+      parameters:
+      - description: social media's id
+        in: path
+        name: socialMediaID
+        required: true
+        type: integer
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Edit social media request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SocialMediaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateSocialMediaResponse'
+      summary: Edit existing social media data
+      tags:
+      - socialmedias
+  /users:
+    delete:
+      description: Delete user data
+      operationId: delete-user
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteUserResponse'
+      summary: Delete user's account
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user data
+      operationId: update-user-data
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update user request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDataRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateUserDataResponse'
+      summary: Update user's email and username
+      tags:
+      - users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login into your user account and get access token with jwt
+      operationId: login-users
+      parameters:
+      - description: Login request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponse'
+      summary: Login into existing account
+      tags:
+      - users
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      operationId: register-users
+      parameters:
+      - description: Register request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.RegisterResponse'
+      summary: Register new user account
+      tags:
+      - users
+swagger: "2.0"
