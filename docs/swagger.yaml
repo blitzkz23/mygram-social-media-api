@@ -2,8 +2,10 @@ definitions:
   dto.CommentRequest:
     properties:
       message:
+        example: This is a comment
         type: string
       photo_id:
+        example: 1
         type: integer
     type: object
   dto.CommentResponse:
@@ -65,8 +67,6 @@ definitions:
     properties:
       email:
         type: string
-      id:
-        type: integer
       username:
         type: string
     type: object
@@ -128,33 +128,43 @@ definitions:
   dto.LoginRequest:
     properties:
       email:
+        example: naufaltampan@gmail.com
         type: string
       password:
+        example: password
         type: string
     type: object
   dto.LoginResponse:
     properties:
       access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hdWZhbHRhbXBhbkBnbWFpbC5jb20iLCJleHAiOjE2NjYyMjYwNjUsImlkIjozN30.Q0vWwNIom3ua1LpbyACM_zIIjXkq7AFN8U6YONL1lFM
         type: string
     type: object
   dto.PhotoRequest:
     properties:
       caption:
+        example: This is my first photo
         type: string
       photo_url:
+        example: https://mygram.com/photos/1
         type: string
       title:
+        example: My first photo
         type: string
     type: object
   dto.RegisterRequest:
     properties:
       age:
+        example: 20
         type: integer
       email:
+        example: naufaltampan@gmail.com
         type: string
       password:
+        example: password
         type: string
       username:
+        example: naufaltampan
         type: string
     type: object
   dto.RegisterResponse:
@@ -171,8 +181,10 @@ definitions:
   dto.SocialMediaRequest:
     properties:
       name:
+        example: Facebook
         type: string
       social_media_url:
+        example: https://www.facebook.com/username
         type: string
     type: object
   dto.SocialMediaResponse:
@@ -191,6 +203,7 @@ definitions:
   dto.UpdateCommentRequest:
     properties:
       message:
+        example: This is a comment
         type: string
     type: object
   dto.UpdateCommentResponse:
@@ -239,8 +252,10 @@ definitions:
   dto.UpdateUserDataRequest:
     properties:
       email:
+        example: cubaganti@gmail.com
         type: string
       username:
+        example: cubaganti
         type: string
     type: object
   dto.UpdateUserDataResponse:

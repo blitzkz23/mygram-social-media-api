@@ -11,6 +11,7 @@ type Photo struct {
 	PhotoURL string `gorm:"not null;type:varchar(191)" form:"photo_url" json:"photo_url" valid:"required~Photo URL is required"`
 	UserID   uint   `json:"user_id"`
 	User     *User
+	Comments []Comment `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"comments"`
 }
 
 func (p *Photo) ToGetPhotoResponseDTO() *dto.GetPhotoResponse {

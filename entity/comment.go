@@ -20,7 +20,6 @@ func (c *Comment) ToGetCommentResponseDTO() *dto.GetCommentResponse {
 		CreatedAt: c.CreatedAt,
 		UpdatedAt: c.UpdatedAt,
 		User: dto.EmbeddedUserResponse{
-			ID:       c.User.ID,
 			Username: c.User.Username,
 			Email:    c.User.Email,
 		},

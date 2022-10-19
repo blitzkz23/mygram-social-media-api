@@ -3,8 +3,8 @@ package dto
 import "time"
 
 type SocialMediaRequest struct {
-	Name           string `json:"name" form:"name" valid:"required~Name is required"`
-	SocialMediaURL string `json:"social_media_url" form:"social_media_url" valid:"required~Social Media URL is required"`
+	Name           string `json:"name" form:"name" valid:"required~Name is required" example:"Facebook"`
+	SocialMediaURL string `json:"social_media_url" form:"social_media_url" valid:"required~Social Media URL is required" example:"https://www.facebook.com/username"`
 }
 
 type SocialMediaResponse struct {

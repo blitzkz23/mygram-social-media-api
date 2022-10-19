@@ -3,8 +3,8 @@ package dto
 import "time"
 
 type CommentRequest struct {
-	Message string `form:"message" json:"message" valid:"required~Message is required"`
-	PhotoID uint   `form:"photo_id" json:"photo_id" valid:"required~Photo ID is required"`
+	Message string `form:"message" json:"message" valid:"required~Message is required" example:"This is a comment"`
+	PhotoID uint   `form:"photo_id" json:"photo_id" valid:"required~Photo ID is required" example:"1"`
 }
 
 type CommentResponse struct {
@@ -35,7 +35,7 @@ type GetCommentResponse struct {
 }
 
 type UpdateCommentRequest struct {
-	Message string `form:"message" json:"message" valid:"required~Message is required"`
+	Message string `form:"message" json:"message" valid:"required~Message is required" example:"This is a comment"`
 }
 
 type UpdateCommentResponse struct {

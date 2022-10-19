@@ -33,7 +33,7 @@ func StartApp() {
 	photoRestHandler := NewPhotoRestHandler(photoService)
 
 	commentRepo := comment_pg.NewCommentPG(db)
-	commentService := service.NewCommentService(commentRepo)
+	commentService := service.NewCommentService(commentRepo, photoRepo)
 	commentRestHandler := NewCommentRestHandler(commentService)
 
 	socialMediaRepo := social_media_pg.NewSocialMediaPG(db)

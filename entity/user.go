@@ -15,10 +15,13 @@ const secret_key = "RAHASIA NEGARA"
 
 type User struct {
 	GormModel
-	Username string `gorm:"not null;unique;type:varchar(191)" form:"username" json:"username" valid:"required~Username is required"`
-	Email    string `gorm:"not null;unique;type:varchar(191)" form:"email" json:"email" valid:"required~Email is required,email~Email is not valid"`
-	Password string `gorm:"not null;type:varchar(191)" form:"password" json:"password" valid:"required~Password is required, minstringlength(6)~Password must be at least 6 characters"`
-	Age      uint8  `gorm:"not null" form:"age" json:"age" valid:"required~Age is required, range(8|100)~Age must be between 8 and 100"`
+	Username    string        `gorm:"not null;unique;type:varchar(191)" form:"username" json:"username" valid:"required~Username is required"`
+	Email       string        `gorm:"not null;unique;type:varchar(191)" form:"email" json:"email" valid:"required~Email is required,email~Email is not valid"`
+	Password    string        `gorm:"not null;type:varchar(191)" form:"password" json:"password" valid:"required~Password is required, minstringlength(6)~Password must be at least 6 characters"`
+	Age         uint8         `gorm:"not null" form:"age" json:"age" valid:"required~Age is required, range(8|100)~Age must be between 8 and 100"`
+	Photos      []Photo       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Comments    []Comment     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	SocialMedia []SocialMedia `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 // ! TODO: Validator Age not trigerred, also hash pashing not working in hooks
@@ -63,6 +66,8 @@ func (u *User) VerifyToken(tokenStr string) error {
 	if bearer := strings.HasPrefix(tokenStr, "Bearer "); !bearer {
 		return errors.New("login to proceed")
 	}
+
+	fmt.Println(len(strings.Split(tokenStr, " ")))
 
 	stringToken := strings.Split(tokenStr, " ")[1]
 

@@ -7,6 +7,7 @@ import (
 	"mygram-social-media-api/pkg/errs"
 	"mygram-social-media-api/pkg/helpers"
 	"mygram-social-media-api/repository/comment_repository"
+	"mygram-social-media-api/repository/photo_repository"
 )
 
 type CommentService interface {
@@ -18,10 +19,11 @@ type CommentService interface {
 
 type commentService struct {
 	commentRepository comment_repository.CommentRepository
+	photoRepository   photo_repository.PhotoRepository
 }
 
-func NewCommentService(commentRepository comment_repository.CommentRepository) CommentService {
-	return &commentService{commentRepository: commentRepository}
+func NewCommentService(commentRepository comment_repository.CommentRepository, photoRepository photo_repository.PhotoRepository) CommentService {
+	return &commentService{commentRepository: commentRepository, photoRepository: photoRepository}
 }
 
 func (c *commentService) PostComment(userID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr) {
@@ -33,6 +35,11 @@ func (c *commentService) PostComment(userID uint, commentPayload *dto.CommentReq
 		Message: commentPayload.Message,
 		PhotoID: commentPayload.PhotoID,
 		UserID:  userID,
+	}
+
+	_, err := c.photoRepository.GetPhotoByID(commentPayload.PhotoID)
+	if err != nil {
+		return nil, err
 	}
 
 	comment, err := c.commentRepository.PostComment(entity)

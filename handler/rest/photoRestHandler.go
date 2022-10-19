@@ -151,7 +151,7 @@ func (p *photoRestHandler) UpdatePhoto(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusAccepted, photo)
+	c.JSON(http.StatusOK, photo)
 }
 
 // DeletePhoto godoc

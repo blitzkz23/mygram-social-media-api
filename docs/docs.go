@@ -638,10 +638,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "This is a comment"
                 },
                 "photo_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -737,9 +739,6 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
-                },
                 "username": {
                     "type": "string"
                 }
@@ -833,10 +832,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "naufaltampan@gmail.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "password"
                 }
             }
         },
@@ -844,7 +845,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "access_token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hdWZhbHRhbXBhbkBnbWFpbC5jb20iLCJleHAiOjE2NjYyMjYwNjUsImlkIjozN30.Q0vWwNIom3ua1LpbyACM_zIIjXkq7AFN8U6YONL1lFM"
                 }
             }
         },
@@ -852,13 +854,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "caption": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "This is my first photo"
                 },
                 "photo_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://mygram.com/photos/1"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "My first photo"
                 }
             }
         },
@@ -866,16 +871,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "age": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 20
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "naufaltampan@gmail.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "password"
                 },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "naufaltampan"
                 }
             }
         },
@@ -900,10 +909,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Facebook"
                 },
                 "social_media_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://www.facebook.com/username"
                 }
             }
         },
@@ -931,7 +942,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "This is a comment"
                 }
             }
         },
@@ -1005,10 +1017,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "cubaganti@gmail.com"
                 },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "cubaganti"
                 }
             }
         },
