@@ -24,7 +24,6 @@ type User struct {
 	SocialMedia []SocialMedia `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
-// ! TODO: Validator Age not trigerred, also hash pashing not working in hooks
 func (u *User) HashPass() errs.MessageErr {
 	salt := 8
 	password := []byte(u.Password)

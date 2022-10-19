@@ -76,7 +76,6 @@ func (u *userRestHandler) Register(c *gin.Context) {
 
 	contentType := helpers.GetContentType(c)
 	if contentType == helpers.AppJSON {
-		// ! TODO: JSON bind not working
 		err = c.ShouldBindJSON(&userRequest)
 	} else {
 		err = c.ShouldBind(&userRequest)
@@ -144,7 +143,6 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 		userData = value
 	}
 
-	// ! TODO: Update error but data updated
 	response, err2 := u.userService.UpdateUserData(userData.ID, &updateUserDataRequest)
 	if err2 != nil {
 		c.JSON(err2.Status(), gin.H{
