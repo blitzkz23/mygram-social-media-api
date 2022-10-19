@@ -18,6 +18,17 @@ func NewCommentRestHandler(commentService service.CommentService) *commentRestHa
 	return &commentRestHandler{commentService: commentService}
 }
 
+// PostComment godoc
+// @Summary Post new comment on photo
+// @Tags comments
+// @Description Post new comment on photo
+// @ID post-comment
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Param RequestBody body dto.CommentRequest true "Post comment request body json"
+// @Success 201 {object} dto.CommentResponse
+// @Router /comments [post]
 func (c *commentRestHandler) PostComment(ctx *gin.Context) {
 	var commentRequest dto.CommentRequest
 	var err error
@@ -58,6 +69,15 @@ func (c *commentRestHandler) PostComment(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, comment)
 }
 
+// GetAllComments godoc
+// @Summary Get all comments
+// @Tags comments
+// @Description Get all comments
+// @ID get-all-comments
+// @Produce json
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Success 200 {object} dto.GetCommentResponse
+// @Router /comments [get]
 func (c *commentRestHandler) GetAllComments(ctx *gin.Context) {
 	var userData entity.User
 	if value, ok := ctx.MustGet("userData").(entity.User); !ok {
@@ -82,8 +102,20 @@ func (c *commentRestHandler) GetAllComments(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, comments)
 }
 
+// UpdateComment godoc
+// @Summary Update existing comment
+// @Tags comments
+// @Description Update comment
+// @ID update-comment
+// @Accept  json
+// @Produce json
+// @Param commentID path uint true "comments's id"
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Param RequestBody body dto.UpdateCommentRequest true "Edit photo request body json"
+// @Success 200 {object} dto.UpdateCommentResponse
+// @Router /comments/{commentID} [put]
 func (c *commentRestHandler) UpdateComment(ctx *gin.Context) {
-	var commentRequest dto.EditCommentRequest
+	var commentRequest dto.UpdateCommentRequest
 	var userData entity.User
 	var err error
 
@@ -132,6 +164,16 @@ func (c *commentRestHandler) UpdateComment(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, comment)
 }
 
+// DeleteComment godoc
+// @Summary Delete existing comment
+// @Tags comments
+// @Description Delete comment
+// @ID delete-comment
+// @Produce json
+// @Param commentID path uint true "comments's id"
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Success 200 {object} dto.DeleteCommentResponse
+// @Router /comments/{commentID} [delete]
 func (c *commentRestHandler) DeleteComment(ctx *gin.Context) {
 	var userData entity.User
 	if value, ok := ctx.MustGet("userData").(entity.User); !ok {

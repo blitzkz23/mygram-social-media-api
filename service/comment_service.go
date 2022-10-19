@@ -12,7 +12,7 @@ import (
 type CommentService interface {
 	PostComment(userID uint, commentPayload *dto.CommentRequest) (*dto.CommentResponse, errs.MessageErr)
 	GetAllComments() ([]*dto.GetCommentResponse, errs.MessageErr)
-	EditCommentData(commentID uint, commentPayload *dto.EditCommentRequest) (*dto.EditCommentResponse, errs.MessageErr)
+	EditCommentData(commentID uint, commentPayload *dto.UpdateCommentRequest) (*dto.UpdateCommentResponse, errs.MessageErr)
 	DeleteComment(commentID uint) (*dto.DeleteCommentResponse, errs.MessageErr)
 }
 
@@ -65,7 +65,7 @@ func (c *commentService) GetAllComments() ([]*dto.GetCommentResponse, errs.Messa
 	return response, nil
 }
 
-func (c *commentService) EditCommentData(commentID uint, commentPayload *dto.EditCommentRequest) (*dto.EditCommentResponse, errs.MessageErr) {
+func (c *commentService) EditCommentData(commentID uint, commentPayload *dto.UpdateCommentRequest) (*dto.UpdateCommentResponse, errs.MessageErr) {
 	err := helpers.ValidateStruct(commentPayload)
 	if err != nil {
 		return nil, err
@@ -81,7 +81,7 @@ func (c *commentService) EditCommentData(commentID uint, commentPayload *dto.Edi
 		return nil, err
 	}
 
-	response := &dto.EditCommentResponse{
+	response := &dto.UpdateCommentResponse{
 		ID:        comment.ID,
 		Message:   comment.Message,
 		PhotoID:   comment.PhotoID,

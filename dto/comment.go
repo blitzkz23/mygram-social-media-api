@@ -34,11 +34,11 @@ type GetCommentResponse struct {
 	Photo     EmbeddedPhotoResponse `json:"Photo"`
 }
 
-type EditCommentRequest struct {
+type UpdateCommentRequest struct {
 	Message string `form:"message" json:"message" valid:"required~Message is required"`
 }
 
-type EditCommentResponse struct {
+type UpdateCommentResponse struct {
 	ID        uint       `json:"id"`
 	Message   string     `json:"message"`
 	PhotoID   uint       `json:"photo_id"`

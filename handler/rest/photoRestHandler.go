@@ -18,6 +18,17 @@ func NewPhotoRestHandler(photoService service.PhotoService) *photoRestHandler {
 	return &photoRestHandler{photoService: photoService}
 }
 
+// PostPhoto godoc
+// @Summary Post a new photo
+// @Tags photos
+// @Description Post a new photo
+// @ID post-photo
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Param RequestBody body dto.PhotoRequest true "Add photo request body json"
+// @Success 201 {object} dto.UpdatePhotoResponse
+// @Router /photos [post]
 func (p *photoRestHandler) PostPhoto(c *gin.Context) {
 	var photoRequest dto.PhotoRequest
 	var err error
@@ -59,6 +70,15 @@ func (p *photoRestHandler) PostPhoto(c *gin.Context) {
 	c.JSON(http.StatusCreated, photo)
 }
 
+// GetAllPhotos godoc
+// @Summary Get all photos
+// @Tags photos
+// @Description Get all photos
+// @ID get-all-photos
+// @Produce json
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Success 200 {object} dto.GetPhotoResponse
+// @Router /photos [get]
 func (p *photoRestHandler) GetAllPhotos(c *gin.Context) {
 	var userData entity.User
 	if value, ok := c.MustGet("userData").(entity.User); !ok {
@@ -83,6 +103,18 @@ func (p *photoRestHandler) GetAllPhotos(c *gin.Context) {
 	c.JSON(http.StatusOK, photos)
 }
 
+// UpdatePhoto godoc
+// @Summary Update existing photo data
+// @Tags photos
+// @Description Update photo data
+// @ID update-photo
+// @Accept  json
+// @Produce json
+// @Param photoID path uint true "photo's id"
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Param RequestBody body dto.PhotoRequest true "Edit photo request body json"
+// @Success 200 {object} dto.UpdatePhotoResponse
+// @Router /photos/{photoID} [put]
 func (p *photoRestHandler) UpdatePhoto(c *gin.Context) {
 	var photoRequest dto.PhotoRequest
 	var err error
@@ -122,6 +154,16 @@ func (p *photoRestHandler) UpdatePhoto(c *gin.Context) {
 	c.JSON(http.StatusAccepted, photo)
 }
 
+// DeletePhoto godoc
+// @Summary Delete existing photo
+// @Tags photos
+// @Description Delete photo
+// @ID delete-photo
+// @Produce json
+// @Param photoID path uint true "photo's id"
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
+// @Success 200 {object} dto.DeletePhotoResponse
+// @Router /photos/{photoID} [delete]
 func (p *photoRestHandler) DeletePhoto(c *gin.Context) {
 	photoIdParam, err := helpers.GetParamId(c, "photoID")
 	if err != nil {

@@ -20,6 +20,7 @@ func NewUserRestHandler(userService service.UserService) *userRestHandler {
 }
 
 // Login godoc
+// @Summary Login into existing account
 // @Tags users
 // @Description Login into your user account and get access token with jwt
 // @ID login-users
@@ -60,6 +61,7 @@ func (u *userRestHandler) Login(c *gin.Context) {
 }
 
 // Register godoc
+// @Summary Register new user account
 // @Tags users
 // @Description Register a new user
 // @ID register-users
@@ -103,6 +105,7 @@ func (u *userRestHandler) Register(c *gin.Context) {
 }
 
 // UpdateUserData godoc
+// @Summary Update user's email and username
 // @Tags users
 // @Description Update user data
 // @ID update-user-data
@@ -155,6 +158,7 @@ func (u *userRestHandler) UpdateUserData(c *gin.Context) {
 }
 
 // DeleteUserData godoc
+// @Summary Delete user's account
 // @Tags users
 // @Description Delete user data
 // @ID delete-user
