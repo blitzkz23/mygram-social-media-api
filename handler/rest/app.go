@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	port = os.Getenv("PORT")
+	PORT = os.Getenv("PORT")
 )
 
 func StartApp() {
@@ -91,6 +91,6 @@ func StartApp() {
 
 	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	fmt.Println("Server running on PORT =>", port)
-	route.Run(port)
+	fmt.Println("Server running on PORT =>", PORT)
+	route.Run(PORT)
 }
