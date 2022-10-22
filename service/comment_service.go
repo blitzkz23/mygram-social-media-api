@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"mygram-social-media-api/dto"
 	"mygram-social-media-api/entity"
 	"mygram-social-media-api/pkg/errs"
@@ -77,7 +76,6 @@ func (c *commentService) EditCommentData(commentID uint, commentPayload *dto.Upd
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Payload di service: ", commentPayload)
 
 	entity := &entity.Comment{
 		Message: commentPayload.Message,

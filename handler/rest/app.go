@@ -9,14 +9,15 @@ import (
 	"mygram-social-media-api/repository/social_media_repository/social_media_pg"
 	"mygram-social-media-api/repository/user_repository/user_pg"
 	"mygram-social-media-api/service"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-const (
-	port = "127.0.0.1:8080"
+var (
+	port = os.Getenv("PORT")
 )
 
 func StartApp() {
