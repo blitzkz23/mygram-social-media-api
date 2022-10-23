@@ -3,7 +3,7 @@ MyGram is a simple social media restful API, where users can post photos, commen
 
 ## Swaggo Docs:
 
-http://localhost:8080/swagger/index.html#/ (Still local)
+https://mygram-social-media-api-production.up.railway.app/swagger/index.html
 
 
 ## Tech Stack
