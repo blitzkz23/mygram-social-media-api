@@ -82,12 +82,12 @@ func StartApp() {
 	}
 
 	// ! Docs
-	docs.SwaggerInfo.Title = "MyGram API"
-	docs.SwaggerInfo.Description = "MyGram is a social media API that allows users to post photos, comments, and add social media links. Created with Golang, Gin-gonic, GORM, and PostgreSQL utilizing DDD pattern."
+	docs.SwaggerInfo.Title = "MyGrams API"
+	docs.SwaggerInfo.Description = "MyGrams merupakan API Social Media yang dibuat dengan menggunakan Golang, Gin-Gonic, dan PostgreSQL serta pattern DDD."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "https://mygram-social-media-api-production.up.railway.app/"
+	docs.SwaggerInfo.Host = "localhost:8080"
 	// docs.SwaggerInfo.BasePath = "/v2"
-	docs.SwaggerInfo.Schemes = []string{"https"}
+	docs.SwaggerInfo.Schemes = []string{"http"}
 
 	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
