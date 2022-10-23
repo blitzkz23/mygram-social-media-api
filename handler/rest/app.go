@@ -92,5 +92,5 @@ func StartApp() {
 	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	fmt.Println("Server running on PORT =>", PORT)
-	route.Run(PORT)
+	route.Run(":" + PORT)
 }
