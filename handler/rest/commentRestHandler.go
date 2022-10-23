@@ -20,7 +20,7 @@ func NewCommentRestHandler(commentService service.CommentService) *commentRestHa
 
 // PostComment godoc
 // @Summary Post new comment on photo
-// @Tags Comment
+// @Tags comments
 // @Description Post new comment on photo
 // @ID post-comment
 // @Accept  json
@@ -71,7 +71,7 @@ func (c *commentRestHandler) PostComment(ctx *gin.Context) {
 
 // GetAllComments godoc
 // @Summary Get all comments
-// @Tags Comment
+// @Tags comments
 // @Description Get all comments
 // @ID get-all-comments
 // @Produce json
@@ -104,7 +104,7 @@ func (c *commentRestHandler) GetAllComments(ctx *gin.Context) {
 
 // UpdateComment godoc
 // @Summary Update existing comment
-// @Tags Comment
+// @Tags comments
 // @Description Update comment
 // @ID update-comment
 // @Accept  json
@@ -166,7 +166,7 @@ func (c *commentRestHandler) UpdateComment(ctx *gin.Context) {
 
 // DeleteComment godoc
 // @Summary Delete existing comment
-// @Tags Comment
+// @Tags comments
 // @Description Delete comment
 // @ID delete-comment
 // @Produce json

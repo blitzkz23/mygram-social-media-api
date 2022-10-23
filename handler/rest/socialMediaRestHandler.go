@@ -20,7 +20,7 @@ func NewSocialMediaRestHandler(socialMediaService service.SocialMediaService) *s
 
 // AddSocialMedia godoc
 // @Summary Add social media data to user's account
-// @Tags Social Media
+// @Tags socialmedias
 // @Description Add Social Media to your account
 // @ID add-social-media
 // @Accept  json
@@ -72,7 +72,7 @@ func (s *socialMediaRestHandler) AddSocialMedia(c *gin.Context) {
 
 // GetAllSocialMedias godoc
 // @Summary Get all social media datas
-// @Tags Social Media
+// @Tags socialmedias
 // @Description Get all social medias
 // @ID get-social-medias
 // @Produce json
@@ -105,7 +105,7 @@ func (s *socialMediaRestHandler) GetAllSocialMedias(c *gin.Context) {
 
 // EditSocialMediaData godoc
 // @Summary Edit existing social media data
-// @Tags Social Media
+// @Tags socialmedias
 // @Description Edit social media data
 // @ID edit-social-media
 // @Accept  json
@@ -167,7 +167,7 @@ func (s *socialMediaRestHandler) EditSocialMediaData(c *gin.Context) {
 
 // DeleteSocialMediaData godoc
 // @Summary Delete existing social media data
-// @Tags Social Media
+// @Tags socialmedias
 // @Description Delete social media data
 // @ID delete-social-media
 // @Produce json
