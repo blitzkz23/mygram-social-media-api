@@ -12,6 +12,8 @@ http://localhost:8080/swagger/index.html#/ (Still local)
 - Database: PostgreSQL 14
 - ORM: Gorm
 - Middlewares: Authentication & Authorization with JWT Token
+- Testing: Testify
+- Deployment: Railway
 
 ## Try Out Application
 ```bash
