@@ -20,7 +20,7 @@ func NewPhotoRestHandler(photoService service.PhotoService) *photoRestHandler {
 
 // PostPhoto godoc
 // @Summary Post a new photo
-// @Tags photos
+// @Tags Photo
 // @Description Post a new photo
 // @ID post-photo
 // @Accept  json
@@ -72,7 +72,7 @@ func (p *photoRestHandler) PostPhoto(c *gin.Context) {
 
 // GetAllPhotos godoc
 // @Summary Get all photos
-// @Tags photos
+// @Tags Photo
 // @Description Get all photos
 // @ID get-all-photos
 // @Produce json
@@ -105,7 +105,7 @@ func (p *photoRestHandler) GetAllPhotos(c *gin.Context) {
 
 // UpdatePhoto godoc
 // @Summary Update existing photo data
-// @Tags photos
+// @Tags Photo
 // @Description Update photo data
 // @ID update-photo
 // @Accept  json
@@ -156,7 +156,7 @@ func (p *photoRestHandler) UpdatePhoto(c *gin.Context) {
 
 // DeletePhoto godoc
 // @Summary Delete existing photo
-// @Tags photos
+// @Tags Photo
 // @Description Delete photo
 // @ID delete-photo
 // @Produce json
